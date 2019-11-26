@@ -1,0 +1,21 @@
+# generated bin
+/bin
+# generated activate
+/activate.sh
+# build folder
+/_build
+# dist folder
+/_dist
+# tmp folder
+/tmp
+
+# emacs editor cruft
+*~
+\#*\#
+.\#*
+
+# sublime editor cruft
+*.sublime-*
+
+# vim editor cruft
+.*.sw[op]

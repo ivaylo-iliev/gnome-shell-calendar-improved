@@ -1,0 +1,18 @@
+[tool.poetry]
+# name the project differently from the make_ical_calendar.py script otherwise
+# it installs project in editable mode polution sbin/make_ical_calendar/ folder
+# with make_ical_calendar.egg-info
+# instead we separately create shim that run make_ical_calendar.py using
+# venv wrapper
+name = "make_ical_calendar_wrapper"
+version = "1"
+description = ""
+authors = []
+
+[tool.poetry.dependencies]
+python = "^3.6"
+icalendar = "^4.0.3"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

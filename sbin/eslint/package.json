@@ -1,0 +1,14 @@
+{
+  "name": "gnome-shell-development-tools",
+  "version": "1.0.0",
+  "description": "Gnome Shell Development tools",
+  "main": "extension.js",
+  "repository": "",
+  "author": "",
+  "license": "BSD",
+  "private": true,
+  "dependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schemalist gettext-domain="gnome-shell-extensions">
+  <schema
+    path="/org/gnome/shell/extensions/calendar-improved/"
+    id="org.gnome.shell.extensions.calendar-improved"
+  >
+    <key
+      type="b"
+      name="disable-event-deletion"
+    >
+      <default>true</default>
+      <summary>Disable deletion of calendar events</summary>
+      <description>
+        Hide close button and disallow keyboard based calendar event deletion
+      </description>
+    </key>
+    <key
+      type="b"
+      name="dim-past-events"
+    >
+      <default>true</default>
+      <summary>Dim past calendar events</summary>
+      <description>
+        Lower opacity on the past calendar events. Mousing over or keyboard
+        focus of the dimmed event will restore regular opacity.
+      </description>
+    </key>
+    <key
+      type="i"
+      name="dim-past-events-opacity"
+    >
+      <default>64</default>
+      <summary>
+        Dim opacity value for past calendar events.
+      </summary>
+      <description>
+        Dim opacity value for past calendar events. Values frok 0 - 255 with
+        0 - completely invisible to 255 no dim
+      </description>
+    </key>
+    <key
+      type="b"
+      name="collapse-past-events"
+    >
+      <default>true</default>
+      <summary>Collapse past even calendar</summary>
+      <description>
+        Only show date and time for past events. Mousing over or keyboard focus
+        of the collapse even will show the entire event
+      </description>
+    </key>
+    <key
+      type="b"
+      name="enable-in-progress-badge"
+    >
+      <default>true</default>
+      <summary>
+        Enable "in progress" event badge
+      </summary>
+      <description>
+        Use custom formatting for "in progress" event badge
+      </description>
+    </key>
+    <key
+      type="s"
+      name="badge-in-progress-background-colour"
+    >
+      <default>"#f57900"</default>
+      <summary>
+        Hexadecimal value for "in progress" event badge background colour
+      </summary>
+      <description>
+        Hexadecimal value for "in progress" event badge background colour
+      </description>
+    </key>
+    <key
+      type="s"
+      name="badge-in-progress-text-colour"
+    >
+      <default>"#000000"</default>
+      <summary>
+        Hexadecimal value for "in progress" event badge text colour
+      </summary>
+      <description>
+        Hexadecimal value for "in progress" event badge text colour
+      </description>
+    </key>
+    <key
+      type="b"
+      name="enable-upcoming-badge"
+    >
+      <default>true</default>
+      <summary>Enable "upcoming" event badge</summary>
+      <description>
+        Use custom formatting for "upcoming" event badge
+        </description>
+    </key>
+    <key
+      type="i"
+      name="badge-upcoming-minutes"
+    >
+      <default>30</default>
+      <summary>Minutes before the "upcoming" event</summary>
+      <description>
+        Number of minutes before event start date for event to be considered
+        "upcoming"
+      </description>
+    </key>
+    <key
+      type="s"
+      name="badge-upcoming-background-colour"
+    >
+      <default>"#729fcf"</default>
+      <summary>
+        Hexadecimal value for "upcoming" event badge background colour
+      </summary>
+      <description>
+        Hexadecimal value for "upcoming" event badge background colour
+      </description>
+    </key>
+    <key
+      type="s"
+      name="badge-upcoming-text-colour"
+    >
+      <default>"#000000"</default>
+      <summary>
+        Hexadecimal value for "upcoming" event badge text colour
+      </summary>
+      <description>
+        Hexadecimal value for "upcoming" event badge text colour
+      </description>
+    </key>
+    <key
+      type="b"
+      name="show-icons"
+    >
+      <default>true</default>
+      <summary>Show icons</summary>
+      <description>
+        Show Calendar event icons. Turning this off allow for more
+        text space
+      </description>
+    </key>
+    <key
+      type="b"
+      name="enable-contextual-icons"
+    >
+      <default>true</default>
+      <summary>Enable event type contextual icons</summary>
+      <description>
+        Show different icons for different type of events,  specifically:
+        "in progress event", "today's all day event", "today's past event",
+        "past event", "past all day event", "future event", "future all day
+        event".
+      </description>
+    </key>
+    <key
+      type="s"
+      name="event-icon-in-progress"
+    >
+      <default>"dialog-warning-symbolic"</default>
+      <summary>Contextual icon for "in progress" event</summary>
+      <description>Contextual icon for "in progress" event</description>
+    </key>
+    <key
+      type="s"
+      name="event-icon-todays-all-day"
+    >
+      <default>"x-office-calendar-symbolic"</default>
+      <summary>Contextual icon for "today's all day" event</summary>
+      <description>Contextual icon for "today's all day" event</description>
+    </key>
+    <key
+      type="s"
+      name="event-icon-todays-past"
+    >
+      <default>"appointment-missed-symbolic"</default>
+      <summary>Contextual icon for "today's past" event</summary>
+      <description>Contextual icon for "today's past" event</description>
+    </key>
+    <key
+      type="s"
+      name="event-icon-past"
+    >
+      <default>"appointment-missed-symbolic"</default>
+      <summary>Contextual icon for "past" event</summary>
+      <description>Contextual icon for "past" event</description>
+    </key>
+    <key
+      type="s"
+      name="event-icon-past-all-day"
+    >
+      <default>"appointment-missed-symbolic"</default>
+      <summary>Contextual icon for "past all day" event</summary>
+      <description>Contextual icon for "past all day" event</description>
+    </key>
+    <key
+      type="s"
+      name="event-icon-future"
+    >
+      <default>"appointment-soon-symbolic"</default>
+      <summary>Contextual icon for "future" event</summary>
+      <description>Contextual icon for "future" event</description>
+    </key>
+    <key
+      type="s"
+      name="event-icon-future-all-day"
+    >
+      <default>"appointment-soon-symbolic"</default>
+      <summary>Contextual icon for "future all day" event</summary>
+      <description>Contextual icon for "future all day" event</description>
+    </key>
+  </schema>
+</schemalist>
