@@ -151,8 +151,20 @@ gnome-shell ${args[*]} 2>&1 | sed 's/\x1b\[[0-9;]*m//g' &
 sleep 5;
 
 # ........................................................................... #
+# enable debug mode for the extension
+dbus-send \
+  --session \
+  --type=method_call \
+  --dest=org.gnome.Shell \
+  /org/gnome/Shell \
+  org.gnome.Shell.Eval string:'
+  window.calendar_improved.debug = true;
+  ' \
+;
+
+# ........................................................................... #
 # resize the Xephyr screen post gnome start up
-xrandr --size "${SIZE}" &
+#xrandr --size "${SIZE}" &
 
 # ........................................................................... #
 # launch gnome-tweak
