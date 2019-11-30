@@ -17,7 +17,7 @@
 
 /* ------------------------------------------------------------------------- */
 // enable global used for debugging
-window.calendar_improved = {
+window.calendarImproved = {
   debug: false,
 };
 

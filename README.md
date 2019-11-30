@@ -64,7 +64,7 @@ busctl \
   call org.gnome.Shell \
   /org/gnome/Shell \
   org.gnome.Shell Eval \
-  s 'window.calendar_improved.debug = true;' \
+  s 'window.calendarImproved.debug = true;' \
 ;
 ```
 
@@ -98,7 +98,7 @@ in the PATH
 
 A handy Makefile bootstrap capable of handling most development, once above
 system prerequisites are installed. It's strongly suggested you use the
-Makefile as it sets up a sandboxed Gnome Shell Extension development 
+Makefile as it sets up a sandboxed Gnome Shell Extension development
 environment.
 
 Set up development tooling using:

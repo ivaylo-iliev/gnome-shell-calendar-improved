@@ -158,7 +158,7 @@ dbus-send \
   --dest=org.gnome.Shell \
   /org/gnome/Shell \
   org.gnome.Shell.Eval string:'
-  window.calendar_improved.debug = true;
+  window.calendarImproved.debug = true;
   ' \
 ;
 
