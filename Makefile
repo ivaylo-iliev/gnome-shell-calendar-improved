@@ -8,6 +8,7 @@
 #  - make
 #  - coreutils
 #  - gnome-shell-extension-tool
+#  - zip
 #
 # ########################################################################### #
 #
@@ -426,67 +427,6 @@ extension: schemas
 
 
 # ........................................................................... #
-install: install-local
-
-
-# ........................................................................... #
-enable-extension-local:
-	@# enable gnome shell extensions
-	gnome-shell-extension-tool \
-	  --enable-extension=ENABLE \
-	  $(UUID) \
-	;
-
-
-# ........................................................................... #
-disable-extension-local:
-	@# disable gnome shell extensions
-	gnome-shell-extension-tool \
-	  --disable-extension=DISABLE \
-	  $(UUID) \
-	;
-
-
-# ........................................................................... #
-reload-extension-local:
-	@# reload gnome shell extensions
-	gnome-shell-extension-tool \
-	  --reload-extension=RELOAD \
-	  $(UUID) \
-	;
-
-
-# ........................................................................... #
-install-local: build
-	@# remove any existing install
-	@rm \
-	  --recursive \
-	  --force \
-	  $(LOCAL_INSTALLBASE)/$(LOCAL_INSTALLNAME) \
-	;
-
-	@# create folder for new install
-	@mkdir \
-	  --parents \
-	  $(LOCAL_INSTALLBASE)/$(LOCAL_INSTALLNAME) \
-	;
-
-	@# copy over everything in build to installation folder
-	@cp \
-	  --recursive \
-	  $(PROJECT_BUILD)/* \
-	  $(LOCAL_INSTALLBASE)/$(LOCAL_INSTALLNAME)/ \
-	;
-
-	@# remove build folder if exists
-	@rm \
-	  --recursive \
-	  --force \
-	  $(PROJECT_BUILD) \
-	;
-
-
-# ........................................................................... #
 build: clean_build extension
 	@echo "create project build"
 	@mkdir \
@@ -578,6 +518,67 @@ clean_sublime:
 
 
 # ........................................................................... #
+install: install_local
+
+
+# ........................................................................... #
+enable_extension_local:
+	@# enable gnome shell extensions
+	gnome-shell-extension-tool \
+	  --enable-extension=ENABLE \
+	  $(UUID) \
+	;
+
+
+# ........................................................................... #
+disable_extension_local:
+	@# disable gnome shell extensions
+	gnome-shell-extension-tool \
+	  --disable-extension=DISABLE \
+	  $(UUID) \
+	;
+
+
+# ........................................................................... #
+reload_extension_local:
+	@# reload gnome shell extensions
+	gnome-shell-extension-tool \
+	  --reload-extension=RELOAD \
+	  $(UUID) \
+	;
+
+
+# ........................................................................... #
+install_local: build
+	@# remove any existing install
+	@rm \
+	  --recursive \
+	  --force \
+	  $(LOCAL_INSTALLBASE)/$(LOCAL_INSTALLNAME) \
+	;
+
+	@# create folder for new install
+	@mkdir \
+	  --parents \
+	  $(LOCAL_INSTALLBASE)/$(LOCAL_INSTALLNAME) \
+	;
+
+	@# copy over everything in build to installation folder
+	@cp \
+	  --recursive \
+	  $(PROJECT_BUILD)/* \
+	  $(LOCAL_INSTALLBASE)/$(LOCAL_INSTALLNAME)/ \
+	;
+
+	@# remove build folder if exists
+	@rm \
+	  --recursive \
+	  --force \
+	  $(PROJECT_BUILD) \
+	;
+
+
+# ........................................................................... #
 info:
 	@echo "NAME              : $(NAME)"
 	@echo "VERSION           : $(VERSION)"
@@ -596,7 +597,7 @@ about:
 # prints out all targets here as phony
 makefile_phony:
 	@echo ".PHONY: \\";
-	@grep -o "^[a-z_\-\_\.]*:" Makefile \
+	@grep -o "^[-a-z_\.]*:" Makefile \
 	| sed 's/:$$/\\/g' \
 	| tr -d '\n' \
 	| sed 's/\\$$//g' \
@@ -630,7 +631,6 @@ makefile_phony:
   lint \
   schemas \
   extension \
-  install \
   build \
   clean_build \
   dist \
@@ -638,6 +638,11 @@ makefile_phony:
   sublime_config \
   open_sublime \
   clean_sublime \
+  install \
+  enable_extension_local \
+  disable_extension_local \
+  reload_extension_local \
+  install_local \
   info \
   about \
   makefile_phony
