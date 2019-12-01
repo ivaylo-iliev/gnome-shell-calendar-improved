@@ -157,9 +157,9 @@ dbus-send \
   --type=method_call \
   --dest=org.gnome.Shell \
   /org/gnome/Shell \
-  org.gnome.Shell.Eval string:'
+  org.gnome.Shell.Eval string:"
   window.calendarImproved.debug = true;
-  ' \
+  " \
 ;
 
 # ........................................................................... #

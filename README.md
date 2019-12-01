@@ -59,12 +59,14 @@ dialog.
 
 If you encounter a problem you can enable the debug logs with:
 ```
-busctl \
-  --user \
-  call org.gnome.Shell \
+dbus-send \
+  --session \
+  --type=method_call \
+  --dest=org.gnome.Shell \
   /org/gnome/Shell \
-  org.gnome.Shell Eval \
-  s 'window.calendarImproved.debug = true;' \
+  org.gnome.Shell.Eval string:"
+  window.calendarImproved.debug = true;
+  " \
 ;
 ```
 
