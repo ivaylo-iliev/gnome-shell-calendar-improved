@@ -70,18 +70,18 @@ OPTIONS
   -c, --clean
     remove the application folder and shims
 
-  -p, --packages-specification-folder
+  -p, --packages-specification-folder <folder path>
     required for '--install', folder containing 'package.json' and
     'yarn.lock' specifying packages to install
 
-  -a, --application-folder
+  -a, --application-folder <folder path>
     required, folder that will contain installation (i.e. 'node_modules')
 
-  -s, --shim-file
+  -s, --shim-file <file path>
     required, path where executable of shim will be placed to package script,
     can be specified multiple times
 
-  -y, --yarn-path
+  -y, --yarn-path <file path>
     optional, path to yarn. defaults to 'yarn'
 
   -v, --verbose

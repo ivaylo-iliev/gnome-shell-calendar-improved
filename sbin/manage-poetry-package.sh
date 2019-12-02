@@ -75,22 +75,22 @@ Options:
   -c, --clean
     remove the application folder and shim
 
-  -e, --poetry-version
+  -e, --poetry-version <poetry version>
     required, version of poetry to manage
 
-  -a, --application-folder
+  -a, --application-folder <folder path>
     required, folder that will contain the installation
 
-  -s, --shim-file
+  -s, --shim-file <file path>
     required, path where executable of yarn shim will be placed.
     typically, inside project bin folder
 
-  -l, --virtualenv-command
+  -l, --virtualenv-command <command, quoted>
     optional, virtualenv command to be used to create virtual environment for
-    poetry install )when properly quoted can contain script arguments)
+    poetry install (when properly quoted can contain script arguments)
     defaults to '${TMP_OPTION_VIRTUALENV_COMMAND}'
 
-  -p, --pip-arguments
+  -p, --pip-arguments <arguments, quoted>
     optional, arguments pip install operation for poetry, can be used to
     specify pip configuration.
 

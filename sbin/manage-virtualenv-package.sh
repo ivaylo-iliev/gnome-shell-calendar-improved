@@ -74,25 +74,25 @@ Options:
   -c, --clean
     remove the application folder and shim
 
-  -e, --virtualenv-version
+  -e, --virtualenv-version <virtualenv version>
     required. version of virtualenv to manage
 
-  -a, --application-folder
+  -a, --application-folder <folder path>
     required, folder that will contain the installation
 
-  -s, --shim-file
+  -s, --shim-file <file path>
     required, path where executable of yarn shim will be placed. typically,
     inside project bin folder
 
-  -n, --python-path
+  -n, --python-path <file path>
     optional, path to python
     defaults to 'python3'
 
-  -d, --curl-path
+  -d, --curl-path <file path>
     optional, path to curl
     defaults to 'curl'
 
-  -p, --parent-download-url
+  -p, --parent-download-url <url>
     URL for the parent location of virtualenv source distribution.
     when combined with version make up download URL
     defaults to official PyPI URL

@@ -78,25 +78,25 @@ OPTIONS
   -c, --clean
     remove the application folder and shims
 
-  -e, --yarn-version
+  -e, --yarn-version <version>
     required, version of yarn to manage
 
-  -a, --application-folder
+  -a, --application-folder <folder path>
     required, folder that will contain the installation
 
-  -s, --shim-file
+  -s, --shim-file <file path>
     required, path where executable of yarn shim will be placed
     typically, inside project bin folder
 
-  -p, --parent-download-url
+  -p, --parent-download-url <url>
     optional, URL to download package from via curl
     defaults to official Yarn download URL
 
-  -n, --node-path
+  -n, --node-path <file path>
     optional, path to node
     defaults to 'node'
 
-  -d, --curl-path
+  -d, --curl-path <file path>
     optional, path to curl
     defaults to 'curl'
 
@@ -135,6 +135,7 @@ function main {
   fi
 
 }
+
 
 # ........................................................................... #
 # get script params and store them
