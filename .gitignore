@@ -1,11 +1,13 @@
-# generated bin
-/bin
 # generated activate
 /activate.sh
+# generated bin
+/bin
 # build folder
 /_build
 # dist folder
 /_dist
+# debug folder
+/_debug
 # tmp folder
 /tmp
 

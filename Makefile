@@ -5,10 +5,14 @@
 # Basic project commands
 #
 # Prerequisites
+#  - GNU make
+#  - bash
 #  - make
 #  - coreutils
-#  - gnome-shell-extension-tool
+#  - grep
+#  - sed
 #  - zip
+#  - gnome-shell-extension-tool
 #
 # ########################################################################### #
 #
@@ -35,10 +39,12 @@ DEFAULT_GOAL := all
 # ........................................................................... #
 # project support folders
 PROJECT = $(CURDIR)
+PROJECT_SRC = $(PROJECT)/src
 PROJECT_SBIN = $(PROJECT)/sbin
 PROJECT_BOOTSTRAP = $(PROJECT_SBIN)/bootstrap
 PROJECT_BIN = $(PROJECT)/bin
 PROJECT_BIN_APPS = $(PROJECT_BIN)/.apps
+PROJECT_DEBUG = $(PROJECT)/_debug
 PROJECT_BUILD = $(PROJECT)/_build
 PROJECT_DIST = $(PROJECT)/_dist
 
@@ -57,17 +63,23 @@ DESCRIPTION = Calendar Improved Gnome Shell Extension
 # ........................................................................... #
 # gnome shell extension uuid
 UUID = $(SLUG)@human.experience
+
+# ........................................................................... #
+# extensions debug variable on the "window" object
+DEBUG_VARIABLE = calendarImproved
+
+# ........................................................................... #
+# files and folders to build/distribute
 BASE_MODULES = \
-	assets \
-	extension.js \
-	lib \
-	metadata.json \
-	prefs.js \
-	schemas \
-	ui
+	src/assets \
+	src/extension.js \
+	src/lib \
+	src/metadata.json \
+	src/prefs.js \
+	src/schemas \
+	src/ui
 EXTRA_MODULES = \
 	LICENSE
-TOLOCALIZE =
 
 # ........................................................................... #
 # local install
@@ -76,7 +88,7 @@ LOCAL_INSTALLNAME = $(UUID)
 
 
 # ........................................................................... #
-YARN_VERSION = 1.19.1
+YARN_VERSION = 1.19.2
 VIRTUALENV_VERSION = 16.7.8
 PYTHON_VERSION = 3
 POETRY_VERSION = 1.0.0b7
@@ -187,8 +199,9 @@ define SUBLIME_CONFIG
 		],
 		"folder_exclude_patterns": [
 			"_build",
-			"bin",
-			"_dist"
+			"_debug",
+			"_dist",
+			"bin"
 		],
 	},
 	]
@@ -388,24 +401,44 @@ clean_make_ical_calendar_application:
 	  $(PROJECT_BIN)/make_ical_calendar \
 	;
 
+# ........................................................................... #
+debug_calendar:
+	@echo "create debug calendar"
+	@mkdir \
+	  --parents \
+	  "$(PROJECT_DEBUG)/home/local/evolution/calendar/system" \
+	;
+	# generate sample calendar
+	@"$(PROJECT_BIN)/make_ical_calendar" \
+	  "$(PROJECT_DEBUG)/home/local/evolution/calendar/system/calendar.ics" \
+	;
+	# delete existing ignored events
+	@rm \
+	  -f \
+	  "$(PROJECT_DEBUG)/home/local/gnome-shell/ignored_events" \
+	 ;
 
 # ........................................................................... #
-x11:
+x11: debug debug_calendar
 	@echo "gnome shell x11 debug session"
 	@$(PROJECT_SBIN)/gnome-shell-session-debug.sh \
-	  x11 \
-	  $(PROJECT) \
-	  $(UUID) \
+	  --session-type x11 \
+	  --sandbox-folder $(PROJECT_DEBUG)/home \
+	  --extension-folder $(PROJECT_SRC) \
+	  --extension-uuid $(UUID) \
+	  --extension-debug-statement "window.$(DEBUG_VARIABLE).debug = true;" \
 	;
 
 
 # ........................................................................... #
-wayland:
+wayland: debug debug_calendar
 	@echo "gnome shell wayland debug session"
 	@$(PROJECT_SBIN)/gnome-shell-session-debug.sh \
-	  wayland \
-	  $(PROJECT) \
-	  $(UUID) \
+	  --session-type wayland \
+	  --sandbox-folder $(PROJECT_DEBUG)/home \
+	  --extension-folder $(PROJECT_SRC) \
+	  --extension-uuid $(UUID) \
+	  --extension-debug-statement "window.$(DEBUG_VARIABLE).debug = true;" \
 	;
 
 
@@ -413,13 +446,14 @@ wayland:
 lint:
 	@echo "eslint ."
 	@$(PROJECT_BIN)/eslint \
-	  $(PROJECT) \
+	  --config $(PROJECT)/.eslintrc.json \
+	  $(PROJECT_SRC) \
 	;
 
 # ........................................................................... #
 schemas:
-	@echo "glib-compile-schemas ./schemas/"
-	@glib-compile-schemas $(PROJECT)/schemas/
+	@echo "glib-compile-schemas schemas/"
+	@glib-compile-schemas $(PROJECT_SRC)/schemas/
 
 
 # ........................................................................... #
@@ -427,7 +461,25 @@ extension: schemas
 
 
 # ........................................................................... #
-build: clean_build extension
+debug:
+	@echo "create project debug"
+	@mkdir \
+	  --parents \
+	  $(PROJECT_DEBUG) \
+	 ;
+
+# ........................................................................... #
+clean_debug:
+	@echo "clean project debug";
+	@rm \
+		--recursive \
+		--force \
+		$(PROJECT_DEBUG) \
+	;
+
+
+# ........................................................................... #
+build: clean_build extension lint
 	@echo "create project build"
 	@mkdir \
 	  --parents \
@@ -584,6 +636,7 @@ info:
 	@echo "VERSION           : $(VERSION)"
 	@echo "SLUG              : $(SLUG)"
 	@echo "PROJECT           : $(PROJECT)"
+	@echo "PROJECT_SRV       : $(PROJECT_SRC)"
 	@echo "PROJECT_SBIN      : $(PROJECT_SBIN)"
 	@echo "PROJECT_BIN       : $(PROJECT_BIN)"
 
@@ -631,6 +684,8 @@ makefile_phony:
   lint \
   schemas \
   extension \
+  debug \
+  clean_debug \
   build \
   clean_build \
   dist \
