@@ -408,11 +408,11 @@ debug_calendar:
 	  --parents \
 	  "$(PROJECT_DEBUG)/home/local/evolution/calendar/system" \
 	;
-	# generate sample calendar
+	@# generate sample calendar
 	@"$(PROJECT_BIN)/make_ical_calendar" \
 	  "$(PROJECT_DEBUG)/home/local/evolution/calendar/system/calendar.ics" \
 	;
-	# delete existing ignored events
+	@# delete existing ignored events
 	@rm \
 	  -f \
 	  "$(PROJECT_DEBUG)/home/local/gnome-shell/ignored_events" \
