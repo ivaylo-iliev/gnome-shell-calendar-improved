@@ -5,6 +5,14 @@
 #  Download virtualenv source distribution tar archive, extract it to
 #  application folder and create a shim to virtualenv
 #
+#  Dependencies
+#
+#   - bash
+#   - codeutils
+#   - sed
+#   - grep
+#   - jq
+#
 # ########################################################################### #
 
 # ........................................................................... #
@@ -25,7 +33,7 @@ set -o pipefail;
 # get this scripts file name
 SCRIPT_NAME=$(basename "${0}");
 # get this scripts folder
-SCRIPT_FOLDER="$(cd $(dirname ${0}); pwd -P)";
+#SCRIPT_FOLDER="$(cd $(dirname "${0}") && pwd -P)";
 
 
 # ........................................................................... #
@@ -39,6 +47,7 @@ TMP_OPTION_CLEAN=0;
 TMP_OPTION_VIRTUALENV_VERSION="";
 TMP_OPTION_APPLICATION_FOLDER="";
 TMP_OPTION_SHIM_FILE="";
+TMP_OPTION_SHIM_VIRTUALENV_ARGUMENTS="";
 TMP_OPTION_PARENT_DOWNLOAD_URL="";
 TMP_OPTION_PYTHON_PATH="";
 TMP_OPTION_CURL_PATH="";
@@ -50,7 +59,6 @@ TMP_OPTION_DEBUG=0;
 
 # ........................................................................... #
 # various command verbosity flags
-TMP_CURL_VERBOSITY="";
 TMP_RM_VERBOSITY="";
 TMP_CHMOD_VERBOSITY="";
 
@@ -75,14 +83,18 @@ Options:
     remove the application folder and shim
 
   -e, --virtualenv-version <virtualenv version>
-    required. version of virtualenv to manage
+    required. version of virtualenv to manage. if set to 'latest' a version is
+    looked up and retrieved from pypi.org
 
   -a, --application-folder <folder path>
     required, folder that will contain the installation
 
   -s, --shim-file <file path>
-    required, path where executable of yarn shim will be placed. typically,
-    inside project bin folder
+    required, path where executable of virtualen shim will be placed.
+    typically, inside a bin folder
+
+  -o, --shim-virtualenv-aurgments <quoted string>
+    optional, quote string containing set of argument to give to virtualenv
 
   -n, --python-path <file path>
     optional, path to python
@@ -93,9 +105,9 @@ Options:
     defaults to 'curl'
 
   -p, --parent-download-url <url>
-    URL for the parent location of virtualenv source distribution.
-    when combined with version make up download URL
-    defaults to official PyPI URL
+    optional, URL for the parent location of virtualenv source distribution.
+    when combined with version make up download URL defaults to official
+    PyPI URL
 
   -v, --verbose
     optional, turn on verbose output
@@ -142,11 +154,12 @@ function process_script_arguments {
   local long_args="";
   local processed_args;
 
-  short_args="i c e: a: s: p: n: d: ";
+  short_args="i c e: a: s: o: n: d: p:";
   short_args+="v q ";
   short_args+="h";
   long_args+="install clean virtualenv-version: application-folder: ";
-  long_args+="shim-file: parent-download-url: python-path: curl-path";
+  long_args+="shim-file: shim-virtualenv-arguments: python-path: curl-path ";
+  long_args+="parent-download-url: ";
   long_args+="verbose quiet ";
   long_args+="version help";
 
@@ -198,6 +211,12 @@ function process_script_arguments {
       # store shim file value
       --shim-file | -s )
         TMP_OPTION_SHIM_FILE="${2}";
+        shift;
+        ;;
+
+      # store shim file value
+      --shim-virtualenv-arguments | -o )
+        TMP_OPTION_SHIM_VIRTUALENV_ARGUMENTS="${2}";
         shift;
         ;;
 
@@ -255,7 +274,7 @@ function process_script_arguments {
         if [ "${#}" -gt 0 ]; then
           # print usage to stderr exit with code 2
           usage 1>&2;
-          echo "Unknown positional arguments(s) given: ${@}">&2;
+          echo "Unknown positional arguments(s) given: $*">&2;
           exit 2;
         else
           # if it 0 then break the loop, so the shift at the end
@@ -268,7 +287,7 @@ function process_script_arguments {
       -*)
         # print usage to stderr since no valid command was provided
         usage 1>&2;
-        echo "Unknown argument(s) given: ${@}">&2;
+        echo "Unknown argument(s) given: $*">&2;
         exit 2;
         ;;
 
@@ -339,11 +358,9 @@ function validate_script_arguments_and_set_defaults {
 
   # if verbose the set gpg, rm, mkdir verbosity
   if [ ${TMP_OPTION_VERBOSE} -eq 1 ]; then
-    TMP_CURL_VERBOSITY="--verbose";
     TMP_RM_VERBOSITY="--verbose";
     TMP_CHMOD_VERBOSITY="--verbose";
   else
-    TMP_CURL_VERBOSITY=""
     TMP_RM_VERBOSITY="";
     TMP_CHMOD_VERBOSITY="";
   fi
@@ -352,20 +369,35 @@ function validate_script_arguments_and_set_defaults {
   # those utilities that have it
   if [ ${TMP_OPTION_QUIET} -eq 1 ]; then
     TMP_OPTION_VERBOSE=0;
-    TMP_CURL_VERBOSITY="--silent"
     TMP_RM_VERBOSITY="";
     TMP_CHMOD_VERBOSITY="--silent";
   fi
 
+  # get the latest version if asked for
+  if [ "${TMP_OPTION_VIRTUALENV_VERSION}" == "latest" ]; then
+    TMP_OPTION_VIRTUALENV_VERSION="$(latest_virtualenv_version)";
+  fi
 
 }
 
+# ........................................................................... #
+function latest_virtualenv_version {
+
+  "${TMP_OPTION_CURL_PATH}" \
+    --silent \
+    --get \
+    --header 'Host: pypi.org' \
+    --header 'Accept: application/json' \
+    https://pypi.org/pypi/virtualenv/json \
+  | jq -r '.info.version'
+}
 
 # ........................................................................... #
 function clean_virtualenv {
 
   # remove existing application folder and shim
   rm \
+    ${TMP_RM_VERBOSITY} \
     -r \
     -f \
     "${TMP_OPTION_APPLICATION_FOLDER}" \
@@ -394,7 +426,7 @@ function install_virtualenv {
   virtualenv_download_url+="${TMP_VIRTUALENV_PREFIX}";
   virtualenv_download_url+="${TMP_OPTION_VIRTUALENV_VERSION}.tar.gz";
 
-  application_parent_folder="$(dirname ${TMP_OPTION_APPLICATION_FOLDER})"
+  application_parent_folder="$(dirname "${TMP_OPTION_APPLICATION_FOLDER}")";
   not_clean=0;
 
   # verity application folder exists
@@ -462,7 +494,7 @@ function make_shim {
   local output_shim_file="${1}";
   local application_folder_path;
 
-  application_folder_path="$(cd ${TMP_OPTION_APPLICATION_FOLDER} && pwd -P)";
+  application_folder_path="$(cd "${TMP_OPTION_APPLICATION_FOLDER}" && pwd -P)";
   application_folder_path+="/${TMP_VIRTUALENV_PREFIX}";
   application_folder_path+="${TMP_OPTION_VIRTUALENV_VERSION}";
 
@@ -472,6 +504,16 @@ function make_shim {
   # run virtualenv
   exec "${TMP_OPTION_PYTHON_PATH}" \\
     "${application_folder_path}/virtualenv.py" \\
+__EOF
+
+  # virtualenv argements if exist
+  if [ "${TMP_OPTION_SHIM_VIRTUALENV_ARGUMENTS}" != "" ]; then
+    cat << ____EOF | sed 's/^  //g' >> "${output_shim_file}"
+      ${TMP_OPTION_SHIM_VIRTUALENV_ARGUMENTS} \\
+____EOF
+  fi
+
+  cat << __EOF | sed 's/^  //g' >> "${output_shim_file}"
       "\$@" \\
   ;
 __EOF
@@ -510,10 +552,12 @@ function get_getopt {
   # we do not use local here, since that operation would yield 0
   # return code, overwriting the getopt one
   opts=$(getopt -o "${short_opts}" -l "${long_opts}" -- "$@" 2>&1);
+  # shellcheck disable=SC2181
   if [ $? != 0 ]; then
     # strip out header text for unrecognized and invalid options
     # and replace it with our own arguments text
     # strip out the single quotes surronding each quote
+    # shellcheck disable=SC1117
     getopt_error_message=$(\
       echo "$opts" \
       | head -n -1 \
@@ -523,7 +567,8 @@ function get_getopt {
       | sed "s/\n//"
     );
     # replace newlines with spaces
-    echo $(echo "${getopt_error_message}");
+    # shellcheck disable=SC2005,SC2116
+    echo "$(echo "${getopt_error_message}")";
     return 1;
   fi
 
@@ -573,7 +618,7 @@ function abort {
     echo ${echo_opts} "${msg}
 Aborting
 " >&2;
-    exit ${exit_code};
+    exit "${exit_code}";
 }
 
 
