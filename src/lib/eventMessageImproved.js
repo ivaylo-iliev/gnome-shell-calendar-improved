@@ -66,7 +66,6 @@ function EventMessageImprovedFactory(settings) {
       // signals registry for this instance
       this._signalsRegistry = new Utils.SignalsRegistry();
 
-
       // set title
       super.setTitle(this._formatEventTime());
 
@@ -92,6 +91,10 @@ function EventMessageImprovedFactory(settings) {
       }
     }
 
+    /* ..................................................................... */
+    _onClicked() {
+      this._logger.debug(this._event.description);
+    }
 
     /* ..................................................................... */
     _decorateEvents() {

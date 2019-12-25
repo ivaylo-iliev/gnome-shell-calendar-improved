@@ -71,11 +71,13 @@ def add_events(calendar):
 
     {
       "title": "Event: All day today",
+      "description": "Whole day event",
       "day": "all-day",
     },
 
     {
       "title": "Event: 12am - 4am",
+      "description": "very early event",
       "day": "today",
       "start": {"hour": 0, "minute": 0},
       "end": {"hour": 4, "minute": 0 },
@@ -83,6 +85,7 @@ def add_events(calendar):
 
     {
       "title": "Event: 04am - 08am",
+      "description": "early event",
       "day": "today",
       "start": {"hour": 4, "minute": 0},
       "end": {"hour": 8, "minute": 0 },
@@ -90,6 +93,7 @@ def add_events(calendar):
 
     {
       "title": "Event: 08am - 12pm",
+      "description": "morning event",
       "day": "today",
       "start": {"hour": 8, "minute": 0},
       "end": {"hour": 12, "minute": 0 },
@@ -97,6 +101,7 @@ def add_events(calendar):
 
     {
       "title": "Event: 12pm - 04pm",
+      "description": "afternoon event",
       "day": "today",
       "start": {"hour": 12, "minute": 0},
       "end": {"hour": 16, "minute": 0 },
@@ -104,6 +109,7 @@ def add_events(calendar):
 
     {
       "title": "Event: 04pm - 08pm",
+      "description": "late afternoon event",
       "day": "today",
       "start": {"hour": 16, "minute": 0},
       "end": {"hour": 20, "minute": 0 },
@@ -111,6 +117,7 @@ def add_events(calendar):
 
     {
       "title": "Event: 08pm - 12am",
+      "description": "evening event",
       "day": "today",
       "start": {"hour": 20, "minute": 0},
       "end": {"hour": 23, "minute": 59 },
@@ -157,6 +164,7 @@ def add_events(calendar):
     # add the event to the calendar:
     event = make_event(
       summary=event_info["title"],
+      description=event_info["description"],
       location="Anywhere",
       start_time=datetime(
         year=start_year,
@@ -226,6 +234,7 @@ def make_calendar(output_file_path:str):
 # ........................................................................... #
 def make_event(
   summary:str,
+  description:str,
   location:str,
   start_time:datetime,
   end_time:datetime,
@@ -241,6 +250,9 @@ def make_event(
 
   # event summary
   event.add("summary", summary)
+
+  # event description
+  event.add("description", description)
 
   # event location
   event["location"] = vText(location)

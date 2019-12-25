@@ -21,15 +21,17 @@ const ExtensionUtils = imports.misc.extensionUtils;
 /* ------------------------------------------------------------------------- */
 // extension imports
 const Extension = ExtensionUtils.getCurrentExtension();
-const eventMessageImproved = Extension.imports.lib.eventMessageImproved;
-const settingsRegistry = Extension.imports.lib.settingsRegistry;
+const CalendarEventImproved = Extension.imports.lib.calendarEventImproved;
+const DBusEventSourceImprovedImproved = Extension.imports.lib.dBusEventSourceImprovedImproved;
+const EventMessageImproved = Extension.imports.lib.eventMessageImproved;
+const SettingsRegistry = Extension.imports.lib.settingsRegistry;
 const Utils = Extension.imports.lib.utils;
-
 
 /* ------------------------------------------------------------------------- */
 // globals
 const builtinCalendarEventMessage = Calendar.EventMessage;
-
+const builtinCalendarDBusEventSource = Calendar.DBusEventSource;
+const builtinCalendarEvent = Calendar.CalendarEvent;
 
 /* ------------------------------------------------------------------------- */
 var CalendarImproved = class CalendarImproved {
@@ -51,7 +53,7 @@ var CalendarImproved = class CalendarImproved {
     this._signalsRegistry = new Utils.SignalsRegistry();
 
     // settings registry
-    this._settingsRegistry = new settingsRegistry.SettingsRegistry();
+    this._settingsRegistry = new SettingsRegistry.SettingsRegistry();
 
   }
 
@@ -61,14 +63,30 @@ var CalendarImproved = class CalendarImproved {
     // initialize settingsRegistry
     this._settingsRegistry.init();
 
+    // disconnect existing events for the event source
+    Main.panel.statusArea.dateMenu._eventSource.disconnectAll();
+    // null out event source so it does not try to deallocate itself,
+    // since apparently that causes issues
+    Main.panel.statusArea.dateMenu._eventSource = null;
+
+    // monkeypatch CalendarEvent to CalendarEventImproved
+    Calendar.CalendarEvent = CalendarEventImproved.CalendarEventImproved;
+
+    // monkey patch EventMessage to our EventMessageImproved
     let EventMessageImprovedClass =
-      eventMessageImproved.EventMessageImprovedFactory(
+      EventMessageImproved.EventMessageImprovedFactory(
         this._settingsRegistry.boundSettings
       );
     Calendar.EventMessage = EventMessageImprovedClass;
 
-    // monkeypatch Calendar.EventMessage with our EventMessage improved
-    //Calendar.EventMessage = eventMessageImproved.EventMessageImproved;
+    // monkeypatch Calendar.DBusEventSource with our DBusEventSourceImproved
+    // for any future use of DBusEventSource
+    Calendar.DBusEventSource = DBusEventSourceImprovedImproved.DBusEventSourceImproved;
+
+    // set new source for existing dateMenu to DBusEventSourceImproved
+    Main.panel.statusArea.dateMenu._setEventSource(
+      new DBusEventSourceImprovedImproved.DBusEventSourceImproved()
+    );
 
     // connect date menu "open-state-changed" signal so we can refresh the menu
     // drop down with any event needed to be dimmed as default setup does not
@@ -89,8 +107,26 @@ var CalendarImproved = class CalendarImproved {
 
   /* ....................................................................... */
   disable() {
+
+    // disconnect existing events for the event source
+    Main.panel.statusArea.dateMenu._eventSource.disconnectAll();
+    // null out event source so it does not try to deallocate itself,
+    // since apparently that causes issues
+    Main.panel.statusArea.dateMenu._eventSource = null;
+
+    // monkeypatch CalendarEvent to CalendarEventImproved
+    Calendar.CalendarEvent = builtinCalendarEvent;
+
+    // monkeypatch Calendar.EventMessage to builtin DBusEventSource
+    Calendar.DBusEventSource = builtinCalendarDBusEventSource;
+
     // monkeypatch Calendar.EventMessage with original Calendar.EventMessage
     Calendar.EventMessage = builtinCalendarEventMessage;
+
+    // set new source for the existing source event
+    Main.panel.statusArea.dateMenu._setEventSource(
+      new builtinCalendarDBusEventSource()
+    );
 
     // disconnect all signals we connected
     this._signalsRegistry.destroy();
