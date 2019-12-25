@@ -88,10 +88,10 @@ LOCAL_INSTALLNAME = $(UUID)
 
 
 # ........................................................................... #
-YARN_VERSION = 1.19.2
-VIRTUALENV_VERSION = 16.7.8
+YARN_VERSION = 1.21.1
+VIRTUALENV_VERSION = 16.7.9
 PYTHON_VERSION = 3
-POETRY_VERSION = 1.0.0b7
+POETRY_VERSION = 1.0.0
 
 
 # ........................................................................... #
