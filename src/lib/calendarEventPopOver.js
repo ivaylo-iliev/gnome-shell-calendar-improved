@@ -43,8 +43,16 @@ var CalendarEventPopOver = class CalendarEventPopOver {
 
   /* ....................................................................... */
   constructor (actor, event) {
+
+    // COMPAT: pre-gnome 3.34 actor compatability
+    let version = imports.misc.config.PACKAGE_VERSION.split(".");
+    if (version[0] >= 3 && version[1] > 32) {
+      this._popOverMenuManager = new PopupMenu.PopupMenuManager(actor);
+    }
+    else {
+      this._popOverMenuManager = new PopupMenu.PopupMenuManager({actor:actor});
+    }
     this._popOverMenu = new CalendarEventPopOverMenu(actor, event);
-    this._popOverMenuManager = new PopupMenu.PopupMenuManager(actor);
     this._popOverMenuManager.addMenu(this._popOverMenu);
   }
 
@@ -64,7 +72,6 @@ class CalendarEventPopOverMenu extends PopupMenu.PopupMenu {
   /* ....................................................................... */
   constructor(actor, event) {
 
-    // TODO: actor bit here for 3.28
     // show on the right, and arrow to the middle
     super(actor, 0.5, St.Side.RIGHT);
 
@@ -112,6 +119,7 @@ var CalendarEventPopOverContent = Utils.registerClass(
 
     /* ..................................................................... */
     _render() {
+      let clutterActor;
 
       // create layout
       // this._contentBox = new St.BoxLayout({
@@ -136,12 +144,15 @@ var CalendarEventPopOverContent = Utils.registerClass(
       );
 
       // add content box to this menu
-      this.add_actor(this._bodyLabel);
+      // COMPAT: pre-gnome 3.34 actor compatability
+      clutterActor = (this instanceof Clutter.Actor) ? this : this.actor
+      clutterActor.add_actor(this._bodyLabel);
 
     }
 
     /* ..................................................................... */
     _render2() {
+      let clutterActor;
 
       // create layout
       // this._contentBox = new St.BoxLayout({
@@ -173,7 +184,9 @@ var CalendarEventPopOverContent = Utils.registerClass(
       //this._contentBox.add_actor(this._bodyLabel);
 
       // add content box to this menu
-      this.add_actor(this._bodyLabel);
+      // COMPAT: pre-gnome 3.34 actor compatability
+      clutterActor = (this instanceof Clutter.Actor) ? this : this.actor
+      clutterActor.add_actor(this._bodyLabel);
 
     }
 
