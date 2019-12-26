@@ -2,7 +2,6 @@
 
 # ........................................................................... #
 import os
-import pytz
 import sys
 import uuid
 
@@ -71,7 +70,8 @@ def add_events(calendar):
 
     {
       "title": "Event: All day today",
-      "description": "Whole day event",
+      "description":
+        "Whole day event\nhow are you\n\ntoday\nAt https://google.com",
       "day": "all-day",
     },
 

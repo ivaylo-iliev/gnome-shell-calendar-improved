@@ -34,6 +34,7 @@ const gsUtil = imports.misc.util;
 /* ------------------------------------------------------------------------- */
 // extensions imports
 const Extension = gsExtensionUtils.getCurrentExtension();
+const CalendarEventPopOver = Extension.imports.lib.calendarEventPopOver;
 const Utils = Extension.imports.lib.utils;
 
 
@@ -72,6 +73,8 @@ function EventMessageImprovedFactory(settings) {
       // decorate events
       this._decorateEvents();
 
+      // init popover
+      this._popOver = null;
     }
 
     /* ..................................................................... */
@@ -93,7 +96,13 @@ function EventMessageImprovedFactory(settings) {
 
     /* ..................................................................... */
     _onClicked() {
-      this._logger.debug(this._event.description);
+      if (this._popOver === null) {
+        this._popOver = new CalendarEventPopOver.CalendarEventPopOver(
+          this.actor,
+          this._event
+        );
+      }
+      this._popOver.popup();
     }
 
     /* ..................................................................... */

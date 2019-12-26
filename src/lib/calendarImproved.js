@@ -13,9 +13,9 @@
 
 /* ------------------------------------------------------------------------- */
 // gnome shell imports
+const ExtensionUtils = imports.misc.extensionUtils;
 const Calendar = imports.ui.calendar;
 const Main = imports.ui.main;
-const ExtensionUtils = imports.misc.extensionUtils;
 
 
 /* ------------------------------------------------------------------------- */
