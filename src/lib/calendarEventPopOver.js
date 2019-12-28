@@ -21,21 +21,16 @@ const St = imports.gi.St;
 
 /* ------------------------------------------------------------------------- */
 // gnome shell imports
-const ExtensionUtils = imports.misc.extensionUtils;
-const Main = imports.ui.main;
-const PopupMenu = imports.ui.popupMenu;
-const BoxPointer = imports.ui.boxpointer;
-const MessageList = imports.ui.messageList;
-
+const gsBoxPointer = imports.ui.boxpointer;
+const gsExtensionUtils = imports.misc.extensionUtils;
+const gsMain = imports.ui.main;
+const gsMessageList = imports.ui.messageList;
+const gsPopupMenu = imports.ui.popupMenu;
 
 /* ------------------------------------------------------------------------- */
 // extension imports
-const Extension = ExtensionUtils.getCurrentExtension();
+const Extension = gsExtensionUtils.getCurrentExtension();
 const Utils = Extension.imports.lib.utils;
-
-
-/* ------------------------------------------------------------------------- */
-// globals
 
 
 /* ------------------------------------------------------------------------- */
@@ -43,15 +38,20 @@ var CalendarEventPopOver = class CalendarEventPopOver {
 
   /* ....................................................................... */
   constructor (actor, event) {
+    let popupMenuOwner;
 
     // COMPAT: pre-gnome 3.34 actor compatability
     let version = imports.misc.config.PACKAGE_VERSION.split(".");
     if (version[0] >= 3 && version[1] > 32) {
-      this._popOverMenuManager = new PopupMenu.PopupMenuManager(actor);
+      popupMenuOwner = actor;
     }
     else {
-      this._popOverMenuManager = new PopupMenu.PopupMenuManager({actor:actor});
+      // older versions access actor property of the owner
+      popupMenuOwner = {actor:actor};
     }
+    this._popOverMenuManager = new gsPopupMenu.PopupMenuManager(
+      popupMenuOwner
+    );
     this._popOverMenu = new CalendarEventPopOverMenu(actor, event);
     this._popOverMenuManager.addMenu(this._popOverMenu);
   }
@@ -67,7 +67,7 @@ var CalendarEventPopOver = class CalendarEventPopOver {
 
 
 /* ------------------------------------------------------------------------- */
-class CalendarEventPopOverMenu extends PopupMenu.PopupMenu {
+class CalendarEventPopOverMenu extends gsPopupMenu.PopupMenu {
 
   /* ....................................................................... */
   constructor(actor, event) {
@@ -82,14 +82,14 @@ class CalendarEventPopOverMenu extends PopupMenu.PopupMenu {
     this.addMenuItem(new CalendarEventPopOverContent(this._event));
 
     // add it to main ui group so it is a popover
-    Main.uiGroup.add_actor(this.actor);
+    gsMain.uiGroup.add_actor(this.actor);
 
     // hide the actor for now
     this.actor.hide();
   }
 
   popup() {
-    this.open(BoxPointer.PopupAnimation.FULL);
+    this.open(gsBoxPointer.PopupAnimation.FULL);
   }
 
 }
@@ -97,7 +97,7 @@ class CalendarEventPopOverMenu extends PopupMenu.PopupMenu {
 
 /* ------------------------------------------------------------------------- */
 var CalendarEventPopOverContent = Utils.registerClass(
-  class CalendarEventPopOverContent extends PopupMenu.PopupBaseMenuItem {
+  class CalendarEventPopOverContent extends gsPopupMenu.PopupBaseMenuItem {
 
     /* ..................................................................... */
     _init(event) {
@@ -129,7 +129,7 @@ var CalendarEventPopOverContent = Utils.registerClass(
       // });
 
       // make body label
-      this._bodyLabel = new MessageList.URLHighlighter("",true, true);
+      this._bodyLabel = new gsMessageList.URLHighlighter("",true, true);
       // style body label actor
       //this._bodyLabel.actor.add_style_class_name("message-body");
 
@@ -145,7 +145,7 @@ var CalendarEventPopOverContent = Utils.registerClass(
 
       // add content box to this menu
       // COMPAT: pre-gnome 3.34 actor compatability
-      clutterActor = (this instanceof Clutter.Actor) ? this : this.actor
+      clutterActor = (this instanceof Clutter.Actor) ? this : this.actor;
       clutterActor.add_actor(this._bodyLabel);
 
     }
@@ -185,7 +185,7 @@ var CalendarEventPopOverContent = Utils.registerClass(
 
       // add content box to this menu
       // COMPAT: pre-gnome 3.34 actor compatability
-      clutterActor = (this instanceof Clutter.Actor) ? this : this.actor
+      clutterActor = (this instanceof Clutter.Actor) ? this : this.actor;
       clutterActor.add_actor(this._bodyLabel);
 
     }

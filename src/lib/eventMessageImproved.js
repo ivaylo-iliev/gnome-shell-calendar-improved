@@ -3,7 +3,6 @@
 //
 
 /* global imports */
-/* global _ */
 /* global C_ */
 
 /* exported EventMessageImprovedFactory */
@@ -25,9 +24,8 @@ const St = imports.gi.St;
 /* ------------------------------------------------------------------------- */
 // gnome shell imports
 const gsCalendar = imports.ui.calendar;
-const gsMessageList = imports.ui.messageList;
-
 const gsExtensionUtils = imports.misc.extensionUtils;
+const gsMessageList = imports.ui.messageList;
 const gsUtil = imports.misc.util;
 
 
@@ -35,8 +33,8 @@ const gsUtil = imports.misc.util;
 // extensions imports
 const Extension = gsExtensionUtils.getCurrentExtension();
 const CalendarEventPopOver = Extension.imports.lib.calendarEventPopOver;
+const DateTimeUtils = Extension.imports.lib.dateTimeUtils;
 const Utils = Extension.imports.lib.utils;
-
 
 /* ------------------------------------------------------------------------- */
 function EventMessageImprovedFactory(settings) {
@@ -49,7 +47,9 @@ function EventMessageImprovedFactory(settings) {
 
       // call parent constructor with empty title (we set it Later)
       // this behaviour change in 3.32 (see bellow) but still work
+      // eslint-disable-next-line max-len
       // https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-30/js/ui/calendar.js#L709
+      // eslint-disable-next-line max-len
       // https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-32/js/ui/calendar.js#L661
       super("", event.summary);
       // store even object for future reference
@@ -255,10 +255,10 @@ function EventMessageImprovedFactory(settings) {
 
       labels = [];
       if (endDatetime !== null) {
-        labels.push(_formatPastTimeSpan(endDatetime));
+        labels.push(DateTimeUtils.formatPastTimeSpan(endDatetime));
       }
       if (startDatetime !== null) {
-        labels.push(_formatFutureTimeSpan(startDatetime));
+        labels.push(DateTimeUtils.formatFutureTimeSpan(startDatetime));
       }
 
       labelCaption = labels.join(", ");
@@ -495,155 +495,3 @@ function EventMessageImprovedFactory(settings) {
 
 }
 
-/* ------------------------------------------------------------------------- */
-function _formatPastTimeSpan(dateTime) {
-
-  let daysAgo;
-  let glibDateTime;
-  let hoursAgo;
-  let minutesAgo;
-  let monthsAgo;
-  let now;
-  let timeSpan;
-  let weeksAgo;
-  let yearsAgo;
-
-  glibDateTime = GLib.DateTime.new_from_unix_local(dateTime / 1000);
-  now = GLib.DateTime.new_now_local();
-  timeSpan = now.difference(glibDateTime);
-
-  minutesAgo = Math.abs(timeSpan / GLib.TIME_SPAN_MINUTE);
-  hoursAgo = Math.abs(timeSpan / GLib.TIME_SPAN_HOUR);
-  daysAgo = Math.abs(timeSpan / GLib.TIME_SPAN_DAY);
-  weeksAgo = Math.abs(daysAgo / 7);
-  monthsAgo = Math.abs(daysAgo / 30);
-  yearsAgo = Math.abs(weeksAgo / 52);
-
-  if (minutesAgo < 1) {
-    return Gettext.ngettext(
-      "%d minute ago",
-      "%d minute ago",
-      1).format(1);
-  }
-
-  if (hoursAgo < 1) {
-    return Gettext.ngettext(
-      "%d minute ago",
-      "%d minutes ago",
-      minutesAgo).format(minutesAgo);
-  }
-
-  if (daysAgo < 1) {
-    return Gettext.ngettext(
-      "%d hour ago",
-      "%d hours ago",
-      hoursAgo).format(hoursAgo);
-  }
-
-  if (daysAgo < 2) {
-    return _("Yesterday");
-  }
-
-  if (daysAgo < 15) {
-    return Gettext.ngettext(
-      "%d day ago",
-      "%d days ago",
-      daysAgo).format(daysAgo);
-  }
-
-  if (weeksAgo < 8) {
-    return Gettext.ngettext(
-      "%d week ago",
-      "%d weeks ago",
-      weeksAgo).format(weeksAgo);
-  }
-
-  if (yearsAgo < 1) {
-    return Gettext.ngettext(
-      "%d month ago",
-      "%d months ago",
-      monthsAgo).format(monthsAgo);
-  }
-
-  return Gettext.ngettext(
-    "%d year ago",
-    "%d years ago",
-    yearsAgo).format(yearsAgo);
-}
-
-
-/* ------------------------------------------------------------------------- */
-function _formatFutureTimeSpan(datetime) {
-
-  let daysSince;
-  let glibDateTime;
-  let hoursSince;
-  let minutesSince;
-  let monthsSince;
-  let now;
-  let timeSpan;
-  let weeksSince;
-  let yearsSince;
-
-  glibDateTime = GLib.DateTime.new_from_unix_local(datetime / 1000);
-  now = GLib.DateTime.new_now_local();
-  timeSpan = now.difference(glibDateTime);
-
-  minutesSince = Math.abs(timeSpan / GLib.TIME_SPAN_MINUTE);
-  hoursSince = Math.abs(timeSpan / GLib.TIME_SPAN_HOUR);
-  daysSince = Math.abs(timeSpan / GLib.TIME_SPAN_DAY);
-  weeksSince = Math.abs(daysSince / 7);
-  monthsSince = Math.abs(daysSince / 30);
-  yearsSince = Math.abs(weeksSince / 52);
-
-  if (minutesSince < 1) {
-    return Gettext.ngettext(
-      "in %d minute",
-      "in %d minute",
-      1).format(1);
-  }
-
-  if (hoursSince < 1) {
-    return Gettext.ngettext(
-      "in %d minute",
-      "in %d minutes",
-      minutesSince).format(minutesSince);
-  }
-
-  if (daysSince < 1) {
-    return Gettext.ngettext(
-      "in %d hour",
-      "in %d hours",
-      hoursSince).format(hoursSince);
-  }
-
-  if (daysSince < 2) {
-    return _("Yesterday");
-  }
-
-  if (daysSince < 15) {
-    return Gettext.ngettext(
-      "in %d day",
-      "in %d days",
-      daysSince).format(daysSince);
-  }
-
-  if (weeksSince < 8) {
-    return Gettext.ngettext(
-      "in %d week",
-      "in %d weeks",
-      weeksSince).format(weeksSince);
-  }
-
-  if (yearsSince < 1) {
-    return Gettext.ngettext(
-      "in %d month",
-      "in %d months",
-      monthsSince).format(monthsSince);
-  }
-
-  return Gettext.ngettext(
-    "in %d year",
-    "in %d years",
-    yearsSince).format(yearsSince);
-}

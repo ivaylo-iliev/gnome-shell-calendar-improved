@@ -13,25 +13,26 @@
 
 /* ------------------------------------------------------------------------- */
 // gnome shell imports
-const ExtensionUtils = imports.misc.extensionUtils;
-const Calendar = imports.ui.calendar;
-const Main = imports.ui.main;
+const gsCalendar = imports.ui.calendar;
+const gsExtensionUtils = imports.misc.extensionUtils;
+const gsMain = imports.ui.main;
 
 
 /* ------------------------------------------------------------------------- */
 // extension imports
-const Extension = ExtensionUtils.getCurrentExtension();
+const Extension = gsExtensionUtils.getCurrentExtension();
 const CalendarEventImproved = Extension.imports.lib.calendarEventImproved;
-const DBusEventSourceImprovedImproved = Extension.imports.lib.dBusEventSourceImprovedImproved;
+const DBusEventSourceImprovedImproved =
+  Extension.imports.lib.dBusEventSourceImprovedImproved;
 const EventMessageImproved = Extension.imports.lib.eventMessageImproved;
 const SettingsRegistry = Extension.imports.lib.settingsRegistry;
 const Utils = Extension.imports.lib.utils;
 
 /* ------------------------------------------------------------------------- */
 // globals
-const builtinCalendarEventMessage = Calendar.EventMessage;
-const builtinCalendarDBusEventSource = Calendar.DBusEventSource;
-const builtinCalendarEvent = Calendar.CalendarEvent;
+const builtinCalendarEventMessage = gsCalendar.EventMessage;
+const builtinCalendarDBusEventSource = gsCalendar.DBusEventSource;
+const builtinCalendarEvent = gsCalendar.CalendarEvent;
 
 /* ------------------------------------------------------------------------- */
 var CalendarImproved = class CalendarImproved {
@@ -44,7 +45,7 @@ var CalendarImproved = class CalendarImproved {
     );
 
     // date menu reference
-    this._dateMenu = Main.panel.statusArea.dateMenu;
+    this._dateMenu = gsMain.panel.statusArea.dateMenu;
 
     // event section reference
     this._eventsSection = this._dateMenu._messageList._eventsSection;
@@ -64,27 +65,28 @@ var CalendarImproved = class CalendarImproved {
     this._settingsRegistry.init();
 
     // disconnect existing events for the event source
-    Main.panel.statusArea.dateMenu._eventSource.disconnectAll();
+    gsMain.panel.statusArea.dateMenu._eventSource.disconnectAll();
     // null out event source so it does not try to deallocate itself,
     // since apparently that causes issues
-    Main.panel.statusArea.dateMenu._eventSource = null;
+    gsMain.panel.statusArea.dateMenu._eventSource = null;
 
     // monkeypatch CalendarEvent to CalendarEventImproved
-    Calendar.CalendarEvent = CalendarEventImproved.CalendarEventImproved;
+    gsCalendar.CalendarEvent = CalendarEventImproved.CalendarEventImproved;
 
     // monkey patch EventMessage to our EventMessageImproved
     let EventMessageImprovedClass =
       EventMessageImproved.EventMessageImprovedFactory(
         this._settingsRegistry.boundSettings
       );
-    Calendar.EventMessage = EventMessageImprovedClass;
+    gsCalendar.EventMessage = EventMessageImprovedClass;
 
     // monkeypatch Calendar.DBusEventSource with our DBusEventSourceImproved
     // for any future use of DBusEventSource
-    Calendar.DBusEventSource = DBusEventSourceImprovedImproved.DBusEventSourceImproved;
+    gsCalendar.DBusEventSource =
+      DBusEventSourceImprovedImproved.DBusEventSourceImproved;
 
     // set new source for existing dateMenu to DBusEventSourceImproved
-    Main.panel.statusArea.dateMenu._setEventSource(
+    gsMain.panel.statusArea.dateMenu._setEventSource(
       new DBusEventSourceImprovedImproved.DBusEventSourceImproved()
     );
 
@@ -109,22 +111,22 @@ var CalendarImproved = class CalendarImproved {
   disable() {
 
     // disconnect existing events for the event source
-    Main.panel.statusArea.dateMenu._eventSource.disconnectAll();
+    gsMain.panel.statusArea.dateMenu._eventSource.disconnectAll();
     // null out event source so it does not try to deallocate itself,
     // since apparently that causes issues
-    Main.panel.statusArea.dateMenu._eventSource = null;
+    gsMain.panel.statusArea.dateMenu._eventSource = null;
 
     // monkeypatch CalendarEvent to CalendarEventImproved
-    Calendar.CalendarEvent = builtinCalendarEvent;
+    gsCalendar.CalendarEvent = builtinCalendarEvent;
 
     // monkeypatch Calendar.EventMessage to builtin DBusEventSource
-    Calendar.DBusEventSource = builtinCalendarDBusEventSource;
+    gsCalendar.DBusEventSource = builtinCalendarDBusEventSource;
 
     // monkeypatch Calendar.EventMessage with original Calendar.EventMessage
-    Calendar.EventMessage = builtinCalendarEventMessage;
+    gsCalendar.EventMessage = builtinCalendarEventMessage;
 
     // set new source for the existing source event
-    Main.panel.statusArea.dateMenu._setEventSource(
+    gsMain.panel.statusArea.dateMenu._setEventSource(
       new builtinCalendarDBusEventSource()
     );
 
