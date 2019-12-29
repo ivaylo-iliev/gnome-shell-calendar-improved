@@ -83,7 +83,7 @@ EXTRA_MODULES = \
 
 # ........................................................................... #
 # local install
-LOCAL_INSTALLBASE = ~/.local/share/gnome-shell/extensions
+LOCAL_INSTALLBASE = $(HOME)/.local/share/gnome-shell/extensions
 LOCAL_INSTALLNAME = $(UUID)
 
 
@@ -570,6 +570,17 @@ clean_sublime:
 
 
 # ........................................................................... #
+symlink:
+	ln \
+	  --force \
+	  --symbolic \
+	  --no-dereference \
+	  "$(PROJECT_SRC)" \
+	  "$(LOCAL_INSTALLBASE)/$(UUID)" \
+	;
+
+
+# ........................................................................... #
 install: install_local
 
 
@@ -680,6 +691,7 @@ makefile_phony:
   clean_poetry_application \
   make_ical_calendar_application \
   clean_make_ical_calendar_application \
+  debug_calendar \
   wayland \
   lint \
   schemas \
@@ -693,6 +705,7 @@ makefile_phony:
   sublime_config \
   open_sublime \
   clean_sublime \
+  symlink \
   install \
   enable_extension_local \
   disable_extension_local \
