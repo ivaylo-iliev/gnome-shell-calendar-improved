@@ -51,7 +51,7 @@ var DBusEventSourceImproved = class DBusEventSourceImproved
         let a = appointments[n];
 
         // eslint-disable-next-line max-len
-        // // https://github.com/GNOME/gnome-shell/blob/master/src/calendar-server/gnome-shell-calendar-server.c#L899-L908
+        // https://github.com/GNOME/gnome-shell/blob/master/src/calendar-server/gnome-shell-calendar-server.c#L899-L908
         // log("================================");
         // for (let j = 0; j < a.length; j++) {
         //   log(j + ": " + a[j]);
@@ -64,6 +64,7 @@ var DBusEventSourceImproved = class DBusEventSourceImproved
         // 3: (gboolean) a->is_all_day,
         // 4: (gint64) start_time,
         // 5: (gint64) end_time,
+        // 6: extras_builder
 
         let date = new Date(a[4] * 1000);
         let end = new Date(a[5] * 1000);

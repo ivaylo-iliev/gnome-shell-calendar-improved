@@ -7,6 +7,7 @@
 
 /* exported formatPastTimeSpan */
 /* exported formatFutureTimeSpan */
+/* exported formatSimpleDateTime */
 
 
 /* ------------------------------------------------------------------------- */
@@ -172,3 +173,20 @@ function formatFutureTimeSpan(datetime) {
     "in %d years",
     yearsSince).format(yearsSince);
 }
+
+
+/* ------------------------------------------------------------------------- */
+function formatSimpleDateTime(date) {
+  let locale = GLib.get_language_names()[1].replace("_", "-");
+  let options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  };
+
+  return date.toLocaleString(locale, options);
+}
+
