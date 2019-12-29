@@ -130,6 +130,9 @@ var CalendarEventPopOverContent = Utils.registerClass(
     /* ..................................................................... */
     render() {
 
+      // destroy any previous childreb before creating them
+      this._clutterActor.destroy_all_children();
+
       // create layout
       this._contentBox = new St.BoxLayout({
         style_class: "message-content",
