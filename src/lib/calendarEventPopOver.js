@@ -62,6 +62,10 @@ var CalendarEventPopOver = class CalendarEventPopOver {
     if (this._popOverMenu.isOpen === false) {
       this._popOverMenu.popup();
     }
+    else {
+      this._popOverMenu.close();
+    }
+
   }
 
 };
@@ -122,28 +126,42 @@ var CalendarEventPopOverContent = Utils.registerClass(
       this._id = null;
       this._summary = null;
       this._duration = null;
-      this._description = null
+      this._description = null;
 
     }
 
 
     /* ..................................................................... */
     render() {
+      //let calendar_uid;
+      let recurring_date;
+      let recurring_text;
+
+      // get recurruing date
+      [, , recurring_date] = this._event.id.split("\n");
+
+      // compose recuring text
+      if (recurring_date.length > 0) {
+        recurring_text = "\nRecuring";
+      }
+      else {
+        recurring_text = "";
+      }
 
       // destroy any previous childreb before creating them
       this._clutterActor.destroy_all_children();
 
       // create layout
       this._contentBox = new St.BoxLayout({
-        style_class: "message-content",
+        style_class: "calendar-improved-layout",
         vertical: true,
         x_expand: true
       });
 
       this._summary = this._makeEntry(
         {
-          text: this._event.summary,
-          style_class: "message-title",
+          text: this._event.summary.trim(),
+          // style_class: "message-title",
           track_hover: false,
           reactive: true,
           can_focus: true
@@ -156,8 +174,9 @@ var CalendarEventPopOverContent = Utils.registerClass(
           text: ""
             + DateTimeUtils.formatSimpleDateTime(this._event.date)
             + " - \n"
-            + DateTimeUtils.formatSimpleDateTime(this._event.end),
-          style_class: "message-body",
+            + DateTimeUtils.formatSimpleDateTime(this._event.end)
+            + recurring_text,
+          // style_class: "message-body",
           track_hover: false,
           reactive: true,
           can_focus: true
@@ -167,8 +186,8 @@ var CalendarEventPopOverContent = Utils.registerClass(
 
       this._description = this._makeEntry(
         {
-          text: this._event.description,
-          style_class: "message-body",
+          text: this._event.description.trim(),
+          // style_class: "message-body",
           track_hover: false,
           reactive: true,
           can_focus: true
@@ -176,22 +195,23 @@ var CalendarEventPopOverContent = Utils.registerClass(
         true
       );
 
-      this._id = this._makeEntry(
-        {
-          text: this._event.id,
-          style_class: "message-body",
-          track_hover: false,
-          reactive: true,
-          can_focus: true
-        },
-        true
-      );
+      // this._id = this._makeEntry(
+      //   {
+      //     text: calendar_uid,
+      //     // style_class: "message-body",
+      //     track_hover: false,
+      //     reactive: true,
+      //     can_focus: true
+      //   },
+      //   false
+      // );
 
       // add elements
       this._contentBox.add_actor(this._summary);
       this._contentBox.add_actor(this._duration);
       this._contentBox.add_actor(this._description);
-      this._contentBox.add_actor(this._id);
+      //this._contentBox.add_actor(this._id);
+
       // add contentBox to this
       this._clutterActor.add_actor(this._contentBox);
 

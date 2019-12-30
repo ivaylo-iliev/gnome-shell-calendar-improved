@@ -51,7 +51,7 @@ var DBusEventSourceImproved = class DBusEventSourceImproved
         let a = appointments[n];
 
         // eslint-disable-next-line max-len
-        // https://github.com/GNOME/gnome-shell/blob/master/src/calendar-server/gnome-shell-calendar-server.c#L899-L908
+        // https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-34/src/calendar-server/gnome-shell-calendar-server.c#L919-933
         // log("================================");
         // for (let j = 0; j < a.length; j++) {
         //   log(j + ": " + a[j]);
