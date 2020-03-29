@@ -22,11 +22,6 @@ window.calendarImproved = {
 
 
 /* ------------------------------------------------------------------------- */
-// language libraries
-//const Lang = imports.lang;
-
-
-/* ------------------------------------------------------------------------- */
 // system libraries imports
 const Gdk = imports.gi.Gdk;
 const Gio = imports.gi.Gio;
@@ -104,10 +99,6 @@ class PreferencesContainer {
     // bind settings
     this._bindSettings();
 
-    // connect all the widget signals to their handles
-    // this._builder.connect_signals_full(
-    //   this._connector.bind(this)
-    // );
   }
 
   /* ....................................................................... */
@@ -128,6 +119,7 @@ class PreferencesContainer {
     this._bindEventTabSettings();
     this._bindBadgesTabSettings();
     this._bindIconsTabSettings();
+    this._bindPopoverTabSettings();
   }
 
   /* ....................................................................... */
@@ -187,14 +179,6 @@ class PreferencesContainer {
       );
     }
   }
-
-  /* ....................................................................... */
-  // _connector(builder, object, signal, handler) {
-  //   object.connect(
-  //     signal,
-  //     this._signalHandler[handler].bind(this)
-  //   );
-  // }
 
 
   /* ....................................................................... */
@@ -340,6 +324,43 @@ class PreferencesContainer {
       ["past_all_day_event_reset_button", "event-icon-past-all-day"],
       ["future_event_reset_button", "event-icon-future"],
       ["future_all_day_event_reset_button", "event-icon-future-all-day"]
+    ]);
+
+  }
+
+  /* ....................................................................... */
+  _bindPopoverTabSettings() {
+
+    // bind enable settings to active property of badge switches
+    this._bindSettingsToGuiElement(
+      [
+        ["enable-event-popover", "enable_event_popover_switch"],
+      ],
+      "active"
+    );
+
+    // bind enable settings to sensitive property of boxes containing dependent
+    // GUI elements
+    this._bindSettingsToGuiElement(
+      [
+        ["enable-event-popover", "enable_event_popover_box"],
+      ],
+      "sensitive"
+    );
+
+    // bind event width and height settings to spinbutton
+    this._bindSettingsToGuiElement(
+      [
+        ["event-popover-width", "event_popover_width_spinbutton"],
+        ["event-popover-height", "event_popover_height_spinbutton"],
+      ],
+      "value"
+    );
+
+    this._bindToolButtonClickToSettingReset([
+      ["event_popover_width_reset_button", "event-popover-width"],
+      ["event_popover_height_reset_button", "event-popover-height"
+      ]
     ]);
 
   }

@@ -96,13 +96,16 @@ function EventMessageImprovedFactory(settings) {
 
     /* ..................................................................... */
     _onClicked() {
-      if (this._popOver === null) {
-        this._popOver = new CalendarEventPopOver.CalendarEventPopOver(
-          this.actor,
-          this._event
-        );
+      if (this._settings._enableEventPopover === true ) {
+        if (this._popOver === null) {
+          this._popOver = new CalendarEventPopOver.CalendarEventPopOver(
+            this.actor,
+            this._event,
+            this._settings
+          );
+        }
+        this._popOver.popup();
       }
-      this._popOver.popup();
     }
 
     /* ..................................................................... */

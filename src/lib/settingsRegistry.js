@@ -61,10 +61,9 @@ var SettingsRegistry = class SettingsRegistry {
     this._boundSettings._eventFutureIcon = null;
     this._boundSettings._eventFutureAllDayIcon = null;
 
-
-    // initialize EventMessageImprovedFactory logger
+    // initialize logger
     this._logger = new Utils.Logger(
-      "eventMessageImproved2.js:SettingsRegistry"
+      "settingsRegistry.js:SettingsRegistry"
     );
 
     // signals registry
@@ -98,6 +97,9 @@ var SettingsRegistry = class SettingsRegistry {
       ["event-icon-past-all-day", "_eventPastAllDayIcon", this._string],
       ["event-icon-future", "_eventFutureIcon", this._string],
       ["event-icon-future-all-day", "_eventFutureAllDayIcon", this._string],
+      ["enable-event-popover", "_enableEventPopover", this._boolean],
+      ["event-popover-width", "_eventPopoverWidth", this._integer],
+      ["event-popover-height", "_eventPopoverHeight", this._integer],
     ];
 
   }

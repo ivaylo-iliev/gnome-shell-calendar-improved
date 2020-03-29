@@ -179,9 +179,9 @@ function formatFutureTimeSpan(datetime) {
 function formatSimpleDateTime(date) {
   let locale = GLib.get_language_names()[1].replace("_", "-");
   let options = {
-    weekday: "long",
+    weekday: "short",
     year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
     hour: "numeric",
     minute: "numeric",

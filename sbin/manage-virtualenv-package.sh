@@ -93,7 +93,7 @@ Options:
     required, path where executable of virtualen shim will be placed.
     typically, inside a bin folder
 
-  -o, --shim-virtualenv-aurgments <quoted string>
+  -o, --shim-virtualenv-arguments <quoted string>
     optional, quote string containing set of argument to give to virtualenv
 
   -n, --python-path <file path>
@@ -315,7 +315,7 @@ function validate_script_arguments_and_set_defaults {
 
   # check if application folder is specified, if not abort with message
   if [ "${TMP_OPTION_APPLICATION_FOLDER}" == "" ]; then
-    abort "please specify output folder using -a/--application-folder" 1;
+    abort "please specify application folder using -a/--application-folder" 1;
   fi
 
   # check if shim file is specified, if not abort with message
@@ -379,6 +379,7 @@ function validate_script_arguments_and_set_defaults {
   fi
 
 }
+
 
 # ........................................................................... #
 function latest_virtualenv_version {
