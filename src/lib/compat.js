@@ -4,6 +4,7 @@
 
 /* global imports */
 
+/* exported GNOME_VERSION_ABOVE_334 */
 /* exported registerClass34 */
 /* exported registerClass32 */
 /* exported registerClass30 */
@@ -23,6 +24,8 @@ const GObject = imports.gi.GObject;
 // ------------------------------------------------------------------------- //
 const VERSION_LIST = imports.misc.config.PACKAGE_VERSION.split(".");
 
+
+// ------------------------------------------------------------------------- //
 var GNOME_VERSION_ABOVE_334;
 if (VERSION_LIST[0] >= 3 && VERSION_LIST[1] > 34) {
   GNOME_VERSION_ABOVE_334 = true;
@@ -46,21 +49,10 @@ var registerClass34;
 // ------------------------------------------------------------------------- //
 var registerClass32;
 {
-  if (VERSION_LIST[0] >= 3 && VERSION_LIST[1] > 30) {
+  if (VERSION_LIST[0] >= 3 && VERSION_LIST[1] > 32) {
     registerClass32 = GObject.registerClass;
   } else {
     registerClass32 = (x => x);
-  }
-}
-
-
-// ------------------------------------------------------------------------- //
-var registerClass30;
-{
-  if (VERSION_LIST[0] >= 3 && VERSION_LIST[1] > 30) {
-    registerClass30 = GObject.registerClass;
-  } else {
-    registerClass30 = (x => x);
   }
 }
 

@@ -22,8 +22,11 @@ const gsMain = imports.ui.main;
 // extension imports
 const Extension = gsExtensionUtils.getCurrentExtension();
 const CalendarEventImproved = Extension.imports.lib.calendarEventImproved;
+const Compat = Extension.imports.lib.compat;
 const DBusEventSourceImprovedImproved =
   Extension.imports.lib.dBusEventSourceImprovedImproved;
+const EventMessageImprovedPre336 =
+  Extension.imports.lib.eventMessageImprovedPre336;
 const EventMessageImproved = Extension.imports.lib.eventMessageImproved;
 const SettingsRegistry = Extension.imports.lib.settingsRegistry;
 const Utils = Extension.imports.lib.utils;
@@ -62,6 +65,7 @@ var CalendarImproved = class CalendarImproved {
 
   /* ....................................................................... */
   enable() {
+    let EventMessageImprovedClass;
 
     // initialize settingsRegistry
     this._settingsRegistry.init();
@@ -75,11 +79,20 @@ var CalendarImproved = class CalendarImproved {
     // monkeypatch CalendarEvent to CalendarEventImproved
     gsCalendar.CalendarEvent = CalendarEventImproved.CalendarEventImproved;
 
-    // monkey patch EventMessage to our EventMessageImproved
-    let EventMessageImprovedClass =
-      EventMessageImproved.EventMessageImprovedFactory(
-        this._settingsRegistry.boundSettings
-      );
+    if (Compat.GNOME_VERSION_ABOVE_334 == true) {
+      // monkey patch EventMessage to our EventMessageImproved
+      EventMessageImprovedClass =
+        EventMessageImproved.EventMessageImprovedFactory(
+          this._settingsRegistry.boundSettings
+        );
+    }
+    else {
+      // monkey patch EventMessage to our EventMessageImproved
+      EventMessageImprovedClass =
+        EventMessageImprovedPre336.EventMessageImprovedFactory(
+          this._settingsRegistry.boundSettings
+        );
+    }
     gsCalendar.EventMessage = EventMessageImprovedClass;
 
     // monkeypatch Calendar.DBusEventSource with our DBusEventSourceImproved
@@ -123,7 +136,6 @@ var CalendarImproved = class CalendarImproved {
 
     // monkeypatch Calendar.EventMessage to builtin DBusEventSource
     gsCalendar.DBusEventSource = builtinCalendarDBusEventSource;
-
 
     // monkeypatch Calendar.EventMessage with original Calendar.EventMessage
     gsCalendar.EventMessage = builtinCalendarEventMessage;
