@@ -41,7 +41,6 @@ DEFAULT_GOAL := all
 PROJECT = $(CURDIR)
 PROJECT_SRC = $(PROJECT)/src
 PROJECT_SBIN = $(PROJECT)/sbin
-PROJECT_BOOTSTRAP = $(PROJECT_SBIN)/bootstrap
 PROJECT_BIN = $(PROJECT)/bin
 PROJECT_BIN_APPS = $(PROJECT_BIN)/.apps
 PROJECT_DEBUG = $(PROJECT)/_debug
@@ -88,10 +87,10 @@ LOCAL_INSTALLNAME = $(UUID)
 
 
 # ........................................................................... #
-YARN_VERSION = 1.21.1
+YARN_VERSION = 1.22.4
 VIRTUALENV_VERSION = 16.7.9
 PYTHON_VERSION = 3
-POETRY_VERSION = 1.0.0
+POETRY_VERSION = 1.0.5
 
 
 # ........................................................................... #
@@ -427,6 +426,7 @@ x11: debug debug_calendar
 	  --extension-folder $(PROJECT_SRC) \
 	  --extension-uuid $(UUID) \
 	  --extension-debug-statement "window.$(DEBUG_VARIABLE).debug = true;" \
+	   --resolution "1400x1050" \
 	;
 
 
@@ -439,6 +439,7 @@ wayland: debug debug_calendar
 	  --extension-folder $(PROJECT_SRC) \
 	  --extension-uuid $(UUID) \
 	  --extension-debug-statement "window.$(DEBUG_VARIABLE).debug = true;" \
+	  --resolution "1400x1050" \
 	;
 
 
@@ -588,8 +589,7 @@ install: install_local
 enable_extension_local:
 	@# enable gnome shell extensions
 	gnome-shell-extension-tool \
-	  --enable-extension=ENABLE \
-	  $(UUID) \
+	  --enable-extension="$(UUID)" \
 	;
 
 
@@ -597,8 +597,7 @@ enable_extension_local:
 disable_extension_local:
 	@# disable gnome shell extensions
 	gnome-shell-extension-tool \
-	  --disable-extension=DISABLE \
-	  $(UUID) \
+	  --disable-extension="$(UUID)" \
 	;
 
 

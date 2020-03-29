@@ -1592,7 +1592,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="relief">none</property>
-                        <property name="uri">https://extensions.gnome.org/extension/NNNN/calendar-improved/</property>
+                        <property name="uri">https://extensions.gnome.org/extension/2386/calendar-improved/</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
