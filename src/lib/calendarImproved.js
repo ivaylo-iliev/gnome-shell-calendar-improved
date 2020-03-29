@@ -28,11 +28,13 @@ const EventMessageImproved = Extension.imports.lib.eventMessageImproved;
 const SettingsRegistry = Extension.imports.lib.settingsRegistry;
 const Utils = Extension.imports.lib.utils;
 
+
 /* ------------------------------------------------------------------------- */
 // globals
 const builtinCalendarEventMessage = gsCalendar.EventMessage;
 const builtinCalendarDBusEventSource = gsCalendar.DBusEventSource;
 const builtinCalendarEvent = gsCalendar.CalendarEvent;
+
 
 /* ------------------------------------------------------------------------- */
 var CalendarImproved = class CalendarImproved {
@@ -65,7 +67,7 @@ var CalendarImproved = class CalendarImproved {
     this._settingsRegistry.init();
 
     // disconnect existing events for the event source
-    gsMain.panel.statusArea.dateMenu._eventSource.disconnectAll();
+    //gsMain.panel.statusArea.dateMenu._eventSource.disconnectAll();
     // null out event source so it does not try to deallocate itself,
     // since apparently that causes issues
     gsMain.panel.statusArea.dateMenu._eventSource = null;
@@ -111,7 +113,7 @@ var CalendarImproved = class CalendarImproved {
   disable() {
 
     // disconnect existing events for the event source
-    gsMain.panel.statusArea.dateMenu._eventSource.disconnectAll();
+    //gsMain.panel.statusArea.dateMenu._eventSource.disconnectAll();
     // null out event source so it does not try to deallocate itself,
     // since apparently that causes issues
     gsMain.panel.statusArea.dateMenu._eventSource = null;
@@ -121,6 +123,7 @@ var CalendarImproved = class CalendarImproved {
 
     // monkeypatch Calendar.EventMessage to builtin DBusEventSource
     gsCalendar.DBusEventSource = builtinCalendarDBusEventSource;
+
 
     // monkeypatch Calendar.EventMessage with original Calendar.EventMessage
     gsCalendar.EventMessage = builtinCalendarEventMessage;

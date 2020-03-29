@@ -33,17 +33,26 @@ const gsUtil = imports.misc.util;
 // extensions imports
 const Extension = gsExtensionUtils.getCurrentExtension();
 const CalendarEventPopOver = Extension.imports.lib.calendarEventPopOver;
+const Compat = Extension.imports.lib.compat;
 const DateTimeUtils = Extension.imports.lib.dateTimeUtils;
 const Utils = Extension.imports.lib.utils;
 
 /* ------------------------------------------------------------------------- */
+var EventMessageImproved;
 function EventMessageImprovedFactory(settings) {
 
+  // if already defined return the global instance (ugh, this seems wrong)
+  // probably need bind
+  if (EventMessageImproved !== undefined) {
+    return EventMessageImproved;
+  }
+
   /* ----------------------------------------------------------------------- */
-  class EventMessageImproved extends gsMessageList.Message {
+  EventMessageImproved = Compat.registerClass(class EventMessageImproved
+    extends gsMessageList.Message {
 
     /* ..................................................................... */
-    constructor(event, date) {
+    _init(event, date) {
 
       // call parent constructor with empty title (we set it Later)
       // this behaviour change in 3.32 (see bellow) but still work
@@ -51,7 +60,7 @@ function EventMessageImprovedFactory(settings) {
       // https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-30/js/ui/calendar.js#L709
       // eslint-disable-next-line max-len
       // https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-32/js/ui/calendar.js#L661
-      super("", event.summary);
+      super._init("", event.summary);
       // store even object for future reference
       this._event = event;
 
@@ -75,6 +84,12 @@ function EventMessageImprovedFactory(settings) {
 
       // init popover
       this._popOver = null;
+
+      // in gnome 3.36 the _onClicked method and signal was removed
+      // so put it back in
+      if (Compat.GNOME_VERSION_ABOVE_334 === true) {
+        this.connect("clicked", this._onClicked.bind(this));
+      }
     }
 
     /* ..................................................................... */
@@ -99,7 +114,7 @@ function EventMessageImprovedFactory(settings) {
       if (this._settings._enableEventPopover === true ) {
         if (this._popOver === null) {
           this._popOver = new CalendarEventPopOver.CalendarEventPopOver(
-            this.actor,
+            Compat.getActor(this),
             this._event,
             this._settings
           );
@@ -200,19 +215,19 @@ function EventMessageImprovedFactory(settings) {
           "event.dim_and_collapse",
           // add key hover event handler
           [
-            this.actor,
+            Compat.getActor(this),
             "notify::hover",
             this._onPastEventHover.bind(this)
           ],
           // add key focus in event handler
           [
-            this.actor,
+            Compat.getActor(this),
             "key-focus-in",
             this._onKeyFocusIn.bind(this)
           ],
           // add key focus out event handler
           [
-            this.actor,
+            Compat.getActor(this),
             "key-focus-out",
             this._onKeyFocusOut.bind(this)
           ]
@@ -225,9 +240,9 @@ function EventMessageImprovedFactory(settings) {
       this._icon = new St.Icon({ icon_name: "x-office-calendar-symbolic" });
       //this.setIcon(this._icon);
 
-      this.actor.connect("style-changed", () => {
-        let iconVisible =
-          this.actor.get_parent().has_style_pseudo_class("first-child");
+      Compat.getActor(this).connect("style-changed", () => {
+        let iconVisible = Compat.getActor(this).get_parent()
+          .has_style_pseudo_class("first-child");
         this._icon.opacity = (iconVisible ? 255 : 0);
       });
     }
@@ -379,6 +394,8 @@ function EventMessageImprovedFactory(settings) {
     _maybeCollapseEvent() {
       if (this._settings._collapsePastEvents === true) {
         this._bodyStack.hide();
+        this._iconBin.child.set_height(16);
+        this._iconBin.child.set_width(16);
       }
     }
 
@@ -386,13 +403,16 @@ function EventMessageImprovedFactory(settings) {
     _maybeUncollapseEvent() {
       if (this._settings._collapsePastEvents === true) {
         this._bodyStack.show();
+        // reset height and width
+        this._iconBin.child.set_height(-1);
+        this._iconBin.child.set_width(-1);
       }
     }
 
     /* ..................................................................... */
     _onPastEventHover() {
       // if hovering then undim the ever
-      if (this.actor.get_hover() === true) {
+      if (Compat.getActor(this).get_hover() === true) {
         this._maybeUndimEvent();
         this._maybeUncollapseEvent();
       }
@@ -492,9 +512,8 @@ function EventMessageImprovedFactory(settings) {
       return title;
     }
 
-  }
+  });
 
   return EventMessageImproved;
 
 }
-

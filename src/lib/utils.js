@@ -16,21 +16,7 @@
 
 // ------------------------------------------------------------------------- //
 // system libraries imports
-const GObject = imports.gi.GObject;
 const Lang = imports.lang;
-
-
-// ------------------------------------------------------------------------- //
-// TODO: change to a function
-var registerClass;
-{
-  let version = imports.misc.config.PACKAGE_VERSION.split(".");
-  if (version[0] >= 3 && version[1] > 30) {
-    registerClass = GObject.registerClass;
-  } else {
-    registerClass = (x => x);
-  }
-}
 
 
 // ------------------------------------------------------------------------- //

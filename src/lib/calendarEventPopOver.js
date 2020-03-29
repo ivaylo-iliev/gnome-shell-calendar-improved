@@ -33,6 +33,7 @@ const gsUtil = imports.misc.util;
 /* ------------------------------------------------------------------------- */
 // extension imports
 const Extension = gsExtensionUtils.getCurrentExtension();
+const Compat = Extension.imports.lib.compat;
 const DateTimeUtils = Extension.imports.lib.dateTimeUtils;
 const Utils = Extension.imports.lib.utils;
 
@@ -129,7 +130,7 @@ class CalendarEventPopOverMenu extends gsPopupMenu.PopupMenu {
 
 
 /* ------------------------------------------------------------------------- */
-var CalendarEventPopOverContent = Utils.registerClass(
+var CalendarEventPopOverContent = Compat.registerClass(
   class CalendarEventPopOverContent extends gsPopupMenu.PopupBaseMenuItem {
 
     /* ..................................................................... */
@@ -151,7 +152,7 @@ var CalendarEventPopOverContent = Utils.registerClass(
       this._settings = settings;
 
       // COMPAT: pre-gnome 3.34 actor compatability
-      this._clutterActor = (this instanceof Clutter.Actor) ? this : this.actor;
+      this._clutterActor = Compat.getActor(this);
 
       this._id = null;
       this._summary = null;
@@ -243,15 +244,16 @@ var CalendarEventPopOverContent = Utils.registerClass(
       // and maxWidth
       maxWidth = this._settings._eventPopoverWidth;
       maxHeight = this._settings._eventPopoverHeight;
-      while (this._parent.actor.height > maxHeight
-             || this._parent.actor.width > maxWidth) {
+      let parentActor = Compat.getActor(this._parent.actor);
+      while (parentActor.height > maxHeight
+             || parentActor.width > maxWidth) {
 
-        if (this._parent.actor.width > maxWidth) {
-          this._parent.actor.set_width(maxWidth);
+        if (parentActor.width > maxWidth) {
+          parentActor.set_width(maxWidth);
         }
 
-        if (this._parent.actor.height > maxHeight) {
-          this._parent.actor.set_height(maxHeight);
+        if (parentActor.height > maxHeight) {
+          parentActor.set_height(maxHeight);
         }
 
       }
@@ -291,9 +293,11 @@ var CalendarEventPopOverContent = Utils.registerClass(
         true,
         multiLine
       );
-      urlHighlighter.actor.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
 
-      return urlHighlighter.actor;
+      let urlHighlighterActor = Compat.getActor(urlHighlighter);
+      urlHighlighterActor.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+
+      return urlHighlighterActor;
     }
 
     /* ..................................................................... */
