@@ -11,5 +11,5 @@
   "url": "https://codeberg.org/human.experience/gnome-shell-calendar-improved",
   "uuid": "calendar-improved@human.experience",
   "settings-schema": "org.gnome.shell.extensions.calendar-improved",
-  "version": 2
+  "version": 4
 }
