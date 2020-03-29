@@ -244,8 +244,8 @@ var CalendarEventPopOverContent = Compat.registerClass(
       // and maxWidth
       maxWidth = this._settings._eventPopoverWidth;
       maxHeight = this._settings._eventPopoverHeight;
-      let parentActor = Compat.getActor(this._parent);
-      while (this._parent.actor.height > maxHeight
+      let parentActor = this._parent.actor;
+      while (parentActor.height > maxHeight
              || parentActor.width > maxWidth) {
 
         if (parentActor.width > maxWidth) {
