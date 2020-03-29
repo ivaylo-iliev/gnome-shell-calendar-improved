@@ -4,8 +4,11 @@
 
 /* global imports */
 
-/* exported registerClass */
+/* exported registerClass34 */
+/* exported registerClass32 */
+/* exported registerClass30 */
 /* exported getActor */
+
 
 // ------------------------------------------------------------------------- //
 // enforce strict mode
@@ -30,13 +33,34 @@ else {
 
 
 // ------------------------------------------------------------------------- //
-// TODO: change to a function
-var registerClass;
+var registerClass34;
+{
+  if (VERSION_LIST[0] >= 3 && VERSION_LIST[1] > 34) {
+    registerClass34 = GObject.registerClass;
+  } else {
+    registerClass34 = (x => x);
+  }
+}
+
+
+// ------------------------------------------------------------------------- //
+var registerClass32;
 {
   if (VERSION_LIST[0] >= 3 && VERSION_LIST[1] > 30) {
-    registerClass = GObject.registerClass;
+    registerClass32 = GObject.registerClass;
   } else {
-    registerClass = (x => x);
+    registerClass32 = (x => x);
+  }
+}
+
+
+// ------------------------------------------------------------------------- //
+var registerClass30;
+{
+  if (VERSION_LIST[0] >= 3 && VERSION_LIST[1] > 30) {
+    registerClass30 = GObject.registerClass;
+  } else {
+    registerClass30 = (x => x);
   }
 }
 

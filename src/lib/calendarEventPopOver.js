@@ -130,7 +130,7 @@ class CalendarEventPopOverMenu extends gsPopupMenu.PopupMenu {
 
 
 /* ------------------------------------------------------------------------- */
-var CalendarEventPopOverContent = Compat.registerClass(
+var CalendarEventPopOverContent = Compat.registerClass32(
   class CalendarEventPopOverContent extends gsPopupMenu.PopupBaseMenuItem {
 
     /* ..................................................................... */

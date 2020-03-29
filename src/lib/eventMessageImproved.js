@@ -48,7 +48,7 @@ function EventMessageImprovedFactory(settings) {
   }
 
   /* ----------------------------------------------------------------------- */
-  EventMessageImproved = Compat.registerClass(class EventMessageImproved
+  EventMessageImproved = Compat.registerClass34(class EventMessageImproved
     extends gsMessageList.Message {
 
     /* ..................................................................... */

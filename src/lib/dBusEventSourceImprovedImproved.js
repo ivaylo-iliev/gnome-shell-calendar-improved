@@ -26,7 +26,7 @@ const Compat = Extension.imports.lib.compat;
 
 
 /* ------------------------------------------------------------------------- */
-var DBusEventSourceImproved = Compat.registerClass(
+var DBusEventSourceImproved = Compat.registerClass34(
   class DBusEventSourceImproved extends gsCalendar.DBusEventSource {
 
     /* ..................................................................... */
