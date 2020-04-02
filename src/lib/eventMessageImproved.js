@@ -394,8 +394,10 @@ function EventMessageImprovedFactory(settings) {
     _maybeCollapseEvent() {
       if (this._settings._collapsePastEvents === true) {
         this._bodyStack.hide();
-        this._iconBin.child.set_height(16);
-        this._iconBin.child.set_width(16);
+        if (this._settings._showIcons === true) {
+          this._iconBin.child.set_height(16);
+          this._iconBin.child.set_width(16);
+        }
       }
     }
 
@@ -403,9 +405,11 @@ function EventMessageImprovedFactory(settings) {
     _maybeUncollapseEvent() {
       if (this._settings._collapsePastEvents === true) {
         this._bodyStack.show();
-        // reset height and width
-        this._iconBin.child.set_height(-1);
-        this._iconBin.child.set_width(-1);
+        if (this._settings._showIcons === true) {
+          // reset height and width
+          this._iconBin.child.set_height(-1);
+          this._iconBin.child.set_width(-1);
+        }
       }
     }
 
