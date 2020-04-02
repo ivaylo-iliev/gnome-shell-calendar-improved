@@ -155,9 +155,11 @@ make lint
 
 ## References
 
+* [http://gjs.guide/](http://gjs.guide/)
 * [https://gjs-docs.gnome.org/](https://gjs-docs.gnome.org/)
 * [https://wiki.gnome.org/Projects/GnomeShell/Development](https://wiki.gnome.org/Projects/GnomeShell/Development)
 * [https://developer.gnome.org](https://developer.gnome.org)
+* [https://developer.gnome.org/glib/stable/gvariant-text.html](https://developer.gnome.org/glib/stable/gvariant-text.html)
 * [https://github.com/zhanghai/gnome-shell-extension-es6-class-codemod](https://github.com/zhanghai/gnome-shell-extension-es6-class-codemod)
 * [https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-28/js/ui/calendar.js](https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-28/js/ui/calendar.js)
 * [https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-28/js/ui/messageList.js](https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-28/js/ui/messageList.js)

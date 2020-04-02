@@ -23,12 +23,12 @@ const Gio = imports.gi.Gio;
 
 
 /* ------------------------------------------------------------------------- */
-const Config = imports.misc.config;
-const ExtensionUtils = imports.misc.extensionUtils;
+const gsConfig = imports.misc.config;
+const gsExtensionUtils = imports.misc.extensionUtils;
 
 
 /* ------------------------------------------------------------------------- */
-const Extension = ExtensionUtils.getCurrentExtension();
+const Extension = gsExtensionUtils.getCurrentExtension();
 
 
 /* ------------------------------------------------------------------------- */
@@ -40,22 +40,18 @@ const Extension = ExtensionUtils.getCurrentExtension();
  * If @domain is not provided, it will be taken from metadata["gettext-domain"]
  */
 function initTranslations(domain) {
-
-  let extension;
   let localeDir;
-
-  extension = ExtensionUtils.getCurrentExtension();
 
   // Check if this extension was built with "make zip-file", and thus
   // has the locale files in a subfolder
   // otherwise assume that extension has been installed in the
   // same prefix as gnome-shell
-  localeDir = extension.dir.get_child("locale");
+  localeDir = Extension.dir.get_child("locale");
   if (localeDir.query_exists(null)) {
     Gettext.bindtextdomain(domain, localeDir.get_path());
   }
   else {
-    Gettext.bindtextdomain(domain, Config.LOCALEDIR);
+    Gettext.bindtextdomain(domain, gsConfig.LOCALEDIR);
   }
 }
 

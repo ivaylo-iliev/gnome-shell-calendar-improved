@@ -61,10 +61,9 @@ var SettingsRegistry = class SettingsRegistry {
     this._boundSettings._eventFutureIcon = null;
     this._boundSettings._eventFutureAllDayIcon = null;
 
-
-    // initialize EventMessageImprovedFactory logger
+    // initialize logger
     this._logger = new Utils.Logger(
-      "eventMessageImproved2.js:SettingsRegistry"
+      "settingsRegistry.js:SettingsRegistry"
     );
 
     // signals registry
@@ -80,11 +79,14 @@ var SettingsRegistry = class SettingsRegistry {
       ["dim-past-events-opacity", "_dimPastEventsOpacity", this._integer],
       ["collapse-past-events", "_collapsePastEvents", this._boolean],
       ["enable-in-progress-badge", "_enableBadgeInProgress", this._boolean],
-      ["badge-in-progress-background-colour", "_badgeInProgressBackgroundColour", this._string],
-      ["badge-in-progress-text-colour", "_badgeInProgressTextColour", this._string],
+      ["badge-in-progress-background-colour",
+        "_badgeInProgressBackgroundColour", this._string],
+      ["badge-in-progress-text-colour", "_badgeInProgressTextColour",
+        this._string],
       ["enable-upcoming-badge", "_enableUpcomingBadge", this._boolean],
       ["badge-upcoming-minutes", "_badgeUpcomingMinutes", this._integer],
-      ["badge-upcoming-background-colour", "_badgeUpcomingBackgroundColour", this._string],
+      ["badge-upcoming-background-colour", "_badgeUpcomingBackgroundColour",
+        this._string],
       ["badge-upcoming-text-colour", "_badgeUpcomingTextColour", this._string],
       ["show-icons", "_showIcons", this._boolean],
       ["enable-contextual-icons", "_enableContextualIcons", this._boolean],
@@ -95,6 +97,9 @@ var SettingsRegistry = class SettingsRegistry {
       ["event-icon-past-all-day", "_eventPastAllDayIcon", this._string],
       ["event-icon-future", "_eventFutureIcon", this._string],
       ["event-icon-future-all-day", "_eventFutureAllDayIcon", this._string],
+      ["enable-event-popover", "_enableEventPopover", this._boolean],
+      ["event-popover-width", "_eventPopoverWidth", this._integer],
+      ["event-popover-height", "_eventPopoverHeight", this._integer],
     ];
 
   }

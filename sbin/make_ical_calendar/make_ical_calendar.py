@@ -2,7 +2,6 @@
 
 # ........................................................................... #
 import os
-import pytz
 import sys
 import uuid
 
@@ -65,17 +64,20 @@ def main(argv:list):
 # ........................................................................... #
 def add_events(calendar):
 
+  big_string = "very early event\nWarehouse narrative towards hacker gang long-chain hydrocarbons shoes rebar media stimulate courier concrete. Neon wristwatch office chrome assassin kanji sub-orbital sentient A.I. corrupted drugs cyber. Alcohol computer spook euro-pop DIY tanto boy voodoo god denim monofilament shrine corporation vehicle pen apophenia render-farm San Francisco. Singularity dissident jeans drone meta-paranoid industrial grade math-apophenia courier numinous into 3D-printed. Realism weathered Chiba chrome tube pre-youtube face forwards post. Dome denim digital rebar carbon rain corrupted 8-bit into drone narrative-space dead vinyl. Office modem paranoid tower long-chain hydrocarbons woman wonton soup rifle table. Saturation point tanto wonton soup ablative construct A.I. urban pistol post-tattoo receding.\nDecay 8-bit face forwards pen tower youtube cartel drone alcohol dolphin shoes footage construct. Silent pistol network beef noodles shoes hotdog geodesic papier-mache tanto drugs fetishism franchise advert Tokyo realism skyscraper table. 8-bit artisanal knife apophenia dead Shibuya jeans warehouse tube hacker spook franchise realism ablative digital claymore mine augmented reality. Military-grade j-pop systema decay katana sunglasses convenience store sign sprawl marketing grenade bomb. Chrome dolphin savant tiger-team post-table tube office numinous physical shoes computer faded market plastic. Long-chain hydrocarbons bomb A.I. hacker sensory face forwards Shibuya skyscraper systema pre. Cyber-sprawl chrome franchise otaku military-grade beef noodles tube. Sensory nano-euro-pop pen convenience store computer table refrigerator. Rifle sentient pistol shrine youtube media knife.\n Corporation free-market pen construct military-grade-space table engine. Girl savant youtube San Francisco monofilament long-chain hydrocarbons receding. Hacker nodal point assassin bomb gang katana chrome physical kanji order-flow knife. Claymore mine pen free-market DIY nodal point stimulate computer sub-orbital warehouse. Systemic footage-ware disposable construct industrial grade soul-delay cartel cyber-post. Uplink industrial grade urban free-market-ware wonton soup camera car realism fetishism euro-pop gang table A.I. weathered woman. Order-flow car rifle dolphin garage dome digital convenience store range-rover numinous cyber-humann\n\nace forwards jeans carbon nodality silent car industrial grade bridge. Sign man corrupted saturation point courier-space footage meta. Fetishism render-farm tattoo kanji construct youtube tiger-team cartel drone modem dome grenade engine film. Military-grade knife garage render-farm smart-skyscraper pre-tank-traps bomb 3D-printed tattoo uplink range-rover. Tattoo boy motion film assault knife semiotics tanto tiger-team table Tokyo corrupted car tower military-grade hotdog face forwards."
 
   # ~~~~~ #
   events_info = (
 
     {
       "title": "Event: All day today",
+      "description": big_string,
       "day": "all-day",
     },
 
     {
       "title": "Event: 12am - 4am",
+      "description": "very early event\nhow are you\n\ntoday\nAt https://google.com",
       "day": "today",
       "start": {"hour": 0, "minute": 0},
       "end": {"hour": 4, "minute": 0 },
@@ -83,6 +85,7 @@ def add_events(calendar):
 
     {
       "title": "Event: 04am - 08am",
+      "description": "early event",
       "day": "today",
       "start": {"hour": 4, "minute": 0},
       "end": {"hour": 8, "minute": 0 },
@@ -90,6 +93,7 @@ def add_events(calendar):
 
     {
       "title": "Event: 08am - 12pm",
+      "description": "morning event",
       "day": "today",
       "start": {"hour": 8, "minute": 0},
       "end": {"hour": 12, "minute": 0 },
@@ -97,6 +101,7 @@ def add_events(calendar):
 
     {
       "title": "Event: 12pm - 04pm",
+      "description": "afternoon event",
       "day": "today",
       "start": {"hour": 12, "minute": 0},
       "end": {"hour": 16, "minute": 0 },
@@ -104,6 +109,7 @@ def add_events(calendar):
 
     {
       "title": "Event: 04pm - 08pm",
+      "description": "late afternoon event",
       "day": "today",
       "start": {"hour": 16, "minute": 0},
       "end": {"hour": 20, "minute": 0 },
@@ -111,6 +117,7 @@ def add_events(calendar):
 
     {
       "title": "Event: 08pm - 12am",
+      "description": "evening event",
       "day": "today",
       "start": {"hour": 20, "minute": 0},
       "end": {"hour": 23, "minute": 59 },
@@ -157,6 +164,7 @@ def add_events(calendar):
     # add the event to the calendar:
     event = make_event(
       summary=event_info["title"],
+      description=event_info["description"],
       location="Anywhere",
       start_time=datetime(
         year=start_year,
@@ -226,6 +234,7 @@ def make_calendar(output_file_path:str):
 # ........................................................................... #
 def make_event(
   summary:str,
+  description:str,
   location:str,
   start_time:datetime,
   end_time:datetime,
@@ -241,6 +250,9 @@ def make_event(
 
   # event summary
   event.add("summary", summary)
+
+  # event description
+  event.add("description", description)
 
   # event location
   event["location"] = vText(location)

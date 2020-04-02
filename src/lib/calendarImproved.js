@@ -13,22 +13,30 @@
 
 /* ------------------------------------------------------------------------- */
 // gnome shell imports
-const Calendar = imports.ui.calendar;
-const Main = imports.ui.main;
-const ExtensionUtils = imports.misc.extensionUtils;
+const gsCalendar = imports.ui.calendar;
+const gsExtensionUtils = imports.misc.extensionUtils;
+const gsMain = imports.ui.main;
 
 
 /* ------------------------------------------------------------------------- */
 // extension imports
-const Extension = ExtensionUtils.getCurrentExtension();
-const eventMessageImproved = Extension.imports.lib.eventMessageImproved;
-const settingsRegistry = Extension.imports.lib.settingsRegistry;
+const Extension = gsExtensionUtils.getCurrentExtension();
+const CalendarEventImproved = Extension.imports.lib.calendarEventImproved;
+const Compat = Extension.imports.lib.compat;
+const DBusEventSourceImprovedImproved =
+  Extension.imports.lib.dBusEventSourceImprovedImproved;
+const EventMessageImprovedPre336 =
+  Extension.imports.lib.eventMessageImprovedPre336;
+const EventMessageImproved = Extension.imports.lib.eventMessageImproved;
+const SettingsRegistry = Extension.imports.lib.settingsRegistry;
 const Utils = Extension.imports.lib.utils;
 
 
 /* ------------------------------------------------------------------------- */
 // globals
-const builtinCalendarEventMessage = Calendar.EventMessage;
+const builtinCalendarEventMessage = gsCalendar.EventMessage;
+const builtinCalendarDBusEventSource = gsCalendar.DBusEventSource;
+const builtinCalendarEvent = gsCalendar.CalendarEvent;
 
 
 /* ------------------------------------------------------------------------- */
@@ -42,7 +50,7 @@ var CalendarImproved = class CalendarImproved {
     );
 
     // date menu reference
-    this._dateMenu = Main.panel.statusArea.dateMenu;
+    this._dateMenu = gsMain.panel.statusArea.dateMenu;
 
     // event section reference
     this._eventsSection = this._dateMenu._messageList._eventsSection;
@@ -51,24 +59,51 @@ var CalendarImproved = class CalendarImproved {
     this._signalsRegistry = new Utils.SignalsRegistry();
 
     // settings registry
-    this._settingsRegistry = new settingsRegistry.SettingsRegistry();
+    this._settingsRegistry = new SettingsRegistry.SettingsRegistry();
 
   }
 
   /* ....................................................................... */
   enable() {
+    let EventMessageImprovedClass;
 
     // initialize settingsRegistry
     this._settingsRegistry.init();
 
-    let EventMessageImprovedClass =
-      eventMessageImproved.EventMessageImprovedFactory(
-        this._settingsRegistry.boundSettings
-      );
-    Calendar.EventMessage = EventMessageImprovedClass;
+    // disconnect existing events for the event source
+    //gsMain.panel.statusArea.dateMenu._eventSource.disconnectAll();
+    // null out event source so it does not try to deallocate itself,
+    // since apparently that causes issues
+    gsMain.panel.statusArea.dateMenu._eventSource = null;
 
-    // monkeypatch Calendar.EventMessage with our EventMessage improved
-    //Calendar.EventMessage = eventMessageImproved.EventMessageImproved;
+    // monkeypatch CalendarEvent to CalendarEventImproved
+    gsCalendar.CalendarEvent = CalendarEventImproved.CalendarEventImproved;
+
+    if (Compat.GNOME_VERSION_ABOVE_334 == true) {
+      // monkey patch EventMessage to our EventMessageImproved
+      EventMessageImprovedClass =
+        EventMessageImproved.EventMessageImprovedFactory(
+          this._settingsRegistry.boundSettings
+        );
+    }
+    else {
+      // monkey patch EventMessage to our EventMessageImproved
+      EventMessageImprovedClass =
+        EventMessageImprovedPre336.EventMessageImprovedFactory(
+          this._settingsRegistry.boundSettings
+        );
+    }
+    gsCalendar.EventMessage = EventMessageImprovedClass;
+
+    // monkeypatch Calendar.DBusEventSource with our DBusEventSourceImproved
+    // for any future use of DBusEventSource
+    gsCalendar.DBusEventSource =
+      DBusEventSourceImprovedImproved.DBusEventSourceImproved;
+
+    // set new source for existing dateMenu to DBusEventSourceImproved
+    gsMain.panel.statusArea.dateMenu._setEventSource(
+      new DBusEventSourceImprovedImproved.DBusEventSourceImproved()
+    );
 
     // connect date menu "open-state-changed" signal so we can refresh the menu
     // drop down with any event needed to be dimmed as default setup does not
@@ -89,8 +124,26 @@ var CalendarImproved = class CalendarImproved {
 
   /* ....................................................................... */
   disable() {
+
+    // disconnect existing events for the event source
+    //gsMain.panel.statusArea.dateMenu._eventSource.disconnectAll();
+    // null out event source so it does not try to deallocate itself,
+    // since apparently that causes issues
+    gsMain.panel.statusArea.dateMenu._eventSource = null;
+
+    // monkeypatch CalendarEvent to CalendarEventImproved
+    gsCalendar.CalendarEvent = builtinCalendarEvent;
+
+    // monkeypatch Calendar.EventMessage to builtin DBusEventSource
+    gsCalendar.DBusEventSource = builtinCalendarDBusEventSource;
+
     // monkeypatch Calendar.EventMessage with original Calendar.EventMessage
-    Calendar.EventMessage = builtinCalendarEventMessage;
+    gsCalendar.EventMessage = builtinCalendarEventMessage;
+
+    // set new source for the existing source event
+    gsMain.panel.statusArea.dateMenu._setEventSource(
+      new builtinCalendarDBusEventSource()
+    );
 
     // disconnect all signals we connected
     this._signalsRegistry.destroy();

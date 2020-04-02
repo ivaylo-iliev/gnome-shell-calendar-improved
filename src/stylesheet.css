@@ -1,0 +1,34 @@
+.calendar-improved-layout {
+  margin: 5px 15px 5px 15px;
+}
+
+.message-duration,
+.message-description {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.calendar-improved-layout > StEntry {
+  border: 0 0 0 0;
+  border-radius: 0 0 0 0;
+  box-shadow: none;
+}
+
+.calendar-improved-layout > StEntry:hover {
+  border: 0 0 0 0;
+  border-radius: 0 0 0 0;
+  box-shadow: none;
+}
+
+.calendar-improved-layout > StEntry:focus {
+  border: 1px 1px 1px 1px;
+  border-radius: 0 0 0 0;
+  box-shadow: none;
+}
+
+.calendar-improved-layout > StEntry:insensitive {
+  border: 0 0 0 0;
+  border-radius: 0 0 0 0;
+  box-shadow: none;
+}
+

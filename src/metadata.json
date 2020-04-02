@@ -1,14 +1,15 @@
 {
   "name": "Calendar Improved",
-  "description": "Improved, human friendly calendar\n\n* Human friendly event time, with past and future wording\n* Disabling of event deletion\n* Dimming of past events, configurable opacity\n* Collapsing of past events, showing only event time\n* In progress badge for current events, configurable colours\n* Upcoming badge for upcoming event, configural interval and colours\n* Show/hide icons, configurable contextual icons for different event types",
+  "description": "Improved, human friendly calendar\n\n* Human friendly event time, with past and future wording\n* Disabling of event deletion\n* Dimming of past event\n* Collapsing of past events, showing only event time\n* In progress colour badge for current events\n* Upcoming colour badge for upcoming event, configural interval and colours\n* Showing/hiding of icons\n* Contextual icons for different event types\n* Popover containing detailed event information\n* Configurable preferences for all the features above",
   "shell-version": [
     "3.28",
     "3.30",
     "3.32",
-    "3.34"
+    "3.34",
+    "3.36"
   ],
   "url": "https://codeberg.org/human.experience/gnome-shell-calendar-improved",
   "uuid": "calendar-improved@human.experience",
   "settings-schema": "org.gnome.shell.extensions.calendar-improved",
-  "version": 1
+  "version": 4
 }

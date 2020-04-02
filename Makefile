@@ -41,7 +41,6 @@ DEFAULT_GOAL := all
 PROJECT = $(CURDIR)
 PROJECT_SRC = $(PROJECT)/src
 PROJECT_SBIN = $(PROJECT)/sbin
-PROJECT_BOOTSTRAP = $(PROJECT_SBIN)/bootstrap
 PROJECT_BIN = $(PROJECT)/bin
 PROJECT_BIN_APPS = $(PROJECT_BIN)/.apps
 PROJECT_DEBUG = $(PROJECT)/_debug
@@ -83,15 +82,15 @@ EXTRA_MODULES = \
 
 # ........................................................................... #
 # local install
-LOCAL_INSTALLBASE = ~/.local/share/gnome-shell/extensions
+LOCAL_INSTALLBASE = $(HOME)/.local/share/gnome-shell/extensions
 LOCAL_INSTALLNAME = $(UUID)
 
 
 # ........................................................................... #
-YARN_VERSION = 1.19.2
-VIRTUALENV_VERSION = 16.7.8
+YARN_VERSION = 1.22.4
+VIRTUALENV_VERSION = 16.7.9
 PYTHON_VERSION = 3
-POETRY_VERSION = 1.0.0b7
+POETRY_VERSION = 1.0.5
 
 
 # ........................................................................... #
@@ -427,6 +426,7 @@ x11: debug debug_calendar
 	  --extension-folder $(PROJECT_SRC) \
 	  --extension-uuid $(UUID) \
 	  --extension-debug-statement "window.$(DEBUG_VARIABLE).debug = true;" \
+	   --resolution "1400x1050" \
 	;
 
 
@@ -439,6 +439,7 @@ wayland: debug debug_calendar
 	  --extension-folder $(PROJECT_SRC) \
 	  --extension-uuid $(UUID) \
 	  --extension-debug-statement "window.$(DEBUG_VARIABLE).debug = true;" \
+	  --resolution "1400x1050" \
 	;
 
 
@@ -570,6 +571,17 @@ clean_sublime:
 
 
 # ........................................................................... #
+symlink:
+	ln \
+	  --force \
+	  --symbolic \
+	  --no-dereference \
+	  "$(PROJECT_SRC)" \
+	  "$(LOCAL_INSTALLBASE)/$(UUID)" \
+	;
+
+
+# ........................................................................... #
 install: install_local
 
 
@@ -577,8 +589,7 @@ install: install_local
 enable_extension_local:
 	@# enable gnome shell extensions
 	gnome-shell-extension-tool \
-	  --enable-extension=ENABLE \
-	  $(UUID) \
+	  --enable-extension="$(UUID)" \
 	;
 
 
@@ -586,8 +597,7 @@ enable_extension_local:
 disable_extension_local:
 	@# disable gnome shell extensions
 	gnome-shell-extension-tool \
-	  --disable-extension=DISABLE \
-	  $(UUID) \
+	  --disable-extension="$(UUID)" \
 	;
 
 
@@ -680,6 +690,7 @@ makefile_phony:
   clean_poetry_application \
   make_ical_calendar_application \
   clean_make_ical_calendar_application \
+  debug_calendar \
   wayland \
   lint \
   schemas \
@@ -693,6 +704,7 @@ makefile_phony:
   sublime_config \
   open_sublime \
   clean_sublime \
+  symlink \
   install \
   enable_extension_local \
   disable_extension_local \

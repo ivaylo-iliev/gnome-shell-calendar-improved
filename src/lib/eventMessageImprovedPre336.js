@@ -52,7 +52,7 @@ function EventMessageImprovedFactory(settings) {
     extends gsMessageList.Message {
 
     /* ..................................................................... */
-    _init(event, date) {
+    constructor(event, date) {
 
       // call parent constructor with empty title (we set it Later)
       // this behaviour change in 3.32 (see bellow) but still work
@@ -60,7 +60,7 @@ function EventMessageImprovedFactory(settings) {
       // https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-30/js/ui/calendar.js#L709
       // eslint-disable-next-line max-len
       // https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-32/js/ui/calendar.js#L661
-      super._init("", event.summary);
+      super("", event.summary);
       // store even object for future reference
       this._event = event;
 

@@ -130,6 +130,38 @@
         Hexadecimal value for "upcoming" event badge text colour
       </description>
     </key>
+
+    <key
+      type="b"
+      name="enable-event-popover"
+    >
+      <default>true</default>
+      <summary>Enable event popover</summary>
+      <description>
+        Enable event popover with more information
+      </description>
+    </key>
+    <key
+      type="i"
+      name="event-popover-width"
+    >
+      <default>400</default>
+      <summary>Event popover width</summary>
+      <description>
+        Width for event popover
+      </description>
+    </key>
+    <key
+      type="i"
+      name="event-popover-height"
+    >
+      <default>400</default>
+      <summary>Event popover height</summary>
+      <description>
+        Height for event popover
+      </description>
+    </key>
+
     <key
       type="b"
       name="show-icons"
