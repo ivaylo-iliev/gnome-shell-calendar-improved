@@ -103,6 +103,11 @@ class PreferencesContainer {
 
   /* ....................................................................... */
   showAll() {
+
+    // set extension_version element to metadata version
+    this._builder.get_object("extension_version").label =
+      Extension.metadata["version"].toString();
+
     // show top level widget and it's children except those that have
     // show_all set to false
     this._topLevelWidget.show_all();
