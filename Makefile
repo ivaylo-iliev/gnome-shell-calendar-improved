@@ -54,7 +54,7 @@ NAME = Calendar Improved
 # project slug, used in file name creations
 SLUG = calendar-improved
 # project version
-VERSION = 1
+VERSION = 5
 # project description
 DESCRIPTION = Calendar Improved Gnome Shell Extension
 
