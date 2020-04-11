@@ -68,6 +68,7 @@ var CalendarEventPopOver = class CalendarEventPopOver {
       event,
       settings
     );
+
     this._popOverMenuManager.addMenu(this._popOverMenu);
   }
 
@@ -140,6 +141,7 @@ var CalendarEventPopOverContent = Compat.registerClass32(
         reactive: true,
         hover: false,
         can_focus: false
+        style_class: "calendar-improved-popover",
       });
 
       // initialize logger
