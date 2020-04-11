@@ -140,8 +140,8 @@ var CalendarEventPopOverContent = Compat.registerClass32(
         activate: false,
         reactive: true,
         hover: false,
-        can_focus: false
-        style_class: "calendar-improved-popover",
+        can_focus: false,
+        style_class: "calendar-improved-popover"
       });
 
       // initialize logger
