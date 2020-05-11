@@ -76,7 +76,8 @@ BASE_MODULES = \
 	src/metadata.json \
 	src/prefs.js \
 	src/schemas \
-	src/ui
+	src/ui \
+	src/stylesheet.css
 EXTRA_MODULES = \
 	LICENSE
 
