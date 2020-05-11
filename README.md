@@ -41,6 +41,7 @@ Gnome Shell
 * 3.30
 * 3.32
 * 3.34
+* 3.36
 
 ## Installation
 
