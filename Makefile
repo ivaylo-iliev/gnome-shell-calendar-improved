@@ -440,7 +440,7 @@ wayland: debug debug_calendar
 	  --extension-folder $(PROJECT_SRC) \
 	  --extension-uuid $(UUID) \
 	  --extension-debug-statement "window.$(DEBUG_VARIABLE).debug = true;" \
-	  --resolution "1400x1050" \
+	  --resolution "1366x768" \
 	;
 
 

@@ -53,6 +53,7 @@ const BasicRegistry = new Lang.Class({
     this._storage = new Object();
   },
 
+  /* ....................................................................... */
   add: function(/* unlimited 3-long array arguments */) {
     // Convert arguments object to array, concatenate with generic
     let args = Array.concat("generic", Array.slice(arguments));
@@ -60,6 +61,7 @@ const BasicRegistry = new Lang.Class({
     this.addWithLabel.apply(this, args);
   },
 
+  /* ....................................................................... */
   destroy: function() {
     for (let label in this._storage) {
       this.removeWithLabel(label);
@@ -78,6 +80,7 @@ const BasicRegistry = new Lang.Class({
     }
   },
 
+  /* ....................................................................... */
   removeWithLabel: function(label) {
     if (this._storage[label]) {
       for (let i = 0; i < this._storage[label].length; i++) {
@@ -90,6 +93,7 @@ const BasicRegistry = new Lang.Class({
 
   // Virtual methods to be implemented by subclass
 
+  /* ....................................................................... */
   /**
    * Create single element to be stored in the storage structure
    */
@@ -115,6 +119,7 @@ var SignalsRegistry = new Lang.Class({
   Name: "CalendarImproved.SignalRegistry",
   Extends: BasicRegistry,
 
+  /* ....................................................................... */
   _create: function(item) {
     let object = item[0];
     let event = item[1];
@@ -124,7 +129,17 @@ var SignalsRegistry = new Lang.Class({
     return [object, id];
   },
 
+  /* ....................................................................... */
   _remove: function(item) {
-    item[0].disconnect(item[1]);
+    // some sort of bug when instance is null, tried checking item[0] and
+    // item[1] for null to no effect, also loggin seems to be broken
+    // so just bury the error for now.
+    // Causes major breakage after lock/suspecd
+    try {
+      item[0].disconnect(item[1]);
+    }
+    catch (e) {
+      /* continue regardless of error */
+    }
   }
 });

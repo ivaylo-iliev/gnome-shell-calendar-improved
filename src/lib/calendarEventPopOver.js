@@ -141,8 +141,7 @@ var CalendarEventPopOverContent = Compat.registerClass32(
         reactive: true,
         hover: false,
         can_focus: false,
-        style_class: "gtkstyle-fallback calendar-improved-popover"
-
+        // style_class: "popup-menu"
       });
 
       // initialize logger
