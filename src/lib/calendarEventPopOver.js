@@ -215,6 +215,15 @@ var CalendarEventPopOverContent = Compat.registerClass32(
 
       // strip all whitespace from the descriptions
       description = this._event.description.trim();
+
+      description = description.split("<br>").join("\n");
+      description = description.split("</br>").join("\n");
+      description = description.split("<wbr>").join("");
+      description = description.split("&nbsp;").join(" ");
+      
+      description = description.replace(RegExp("<a[^>]*>", "g"), "");
+      description = description.replace(RegExp("</a[^>]*>", "g"), "");
+
       // if trimmed description text exists, create description with
       // highlighted urls and add it to content box
       if (description.length > 0 ) {
@@ -393,13 +402,16 @@ var CalendarEventPopOverContent = Compat.registerClass32(
       //   clutter_input_focus_set_input_panel_state: assertion
       //   'clutter_input_focus_is_focused (focus)' failed
       entry = new St.Entry(params);
-      entry.clutter_text.editable = false;
-      entry.clutter_text.selectable = true;
+      
+      entry.text.editable = false;
+      entry.text.selectable = true;
       if (multiLine === true) {
-        entry.clutter_text.single_line_mode = false;
-        entry.clutter_text.line_wrap = true;
-        entry.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
+        entry.text.single_line_mode = false;
+        entry.text.line_wrap = true;
+        entry.text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
       }
+
+
       gsShellEntry.addContextMenu(entry);
 
       return entry;
